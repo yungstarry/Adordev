@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adordev — Software Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@300;400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  --ink:       #0c0c0e;
+  --ink-soft:  #16161a;
+  --line:      rgba(255,255,255,0.07);
+  --line-med:  rgba(255,255,255,0.12);
+  --fog:       #6e6e7e;
+  --smoke:     #9898a8;
+  --snow:      #f0eee8;
+  --white:     #fafaf8;
+  --acid:      #c8f53a;
+  --acid-dim:  rgba(200,245,58,0.10);
+  --acid-glow: rgba(200,245,58,0.22);
+  --ease:      cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--ink);
+  color: var(--smoke);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 300;
+  line-height: 1.6;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+a { color: inherit; text-decoration: none; cursor: none; }
+button { cursor: none; border: none; background: none; }
+::selection { background: var(--acid); color: var(--ink); }
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb { background: var(--acid); }
+
+/* ============================================================
+   CURSOR
+   ============================================================ */
+#cur-dot {
+  position: fixed; z-index: 9999;
+  width: 8px; height: 8px;
+  background: var(--acid);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%,-50%);
+  mix-blend-mode: screen;
+  transition: width .25s var(--ease), height .25s var(--ease);
+}
+#cur-ring {
+  position: fixed; z-index: 9998;
+  width: 40px; height: 40px;
+  border: 1px solid rgba(200,245,58,.3);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%,-50%);
+  transition: width .3s var(--ease), height .3s var(--ease), border-color .3s;
+}
+body.hov #cur-dot { width: 14px; height: 14px; }
+body.hov #cur-ring { width: 60px; height: 60px; border-color: rgba(200,245,58,.5); }
+
+/* ============================================================
+   NOISE
+   ============================================================ */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 9000;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: .022;
+  pointer-events: none;
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  padding: 0 52px;
+  height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid transparent;
+  transition: background .4s, border-color .4s;
+}
+nav.stuck {
+  background: rgba(12,12,14,.9);
+  backdrop-filter: blur(20px) saturate(120%);
+  border-color: var(--line);
+}
+
+.nav-logo {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: -0.04em;
+  color: var(--white);
+}
+.nav-logo em { font-style: normal; color: var(--acid); }
+
+.nav-links {
+  display: flex; gap: 36px;
+  position: absolute; left: 50%; transform: translateX(-50%);
+  list-style: none;
+}
+.nav-links a {
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--fog);
+  transition: color .2s;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+}
+.nav-links a:hover { color: var(--snow); border-color: var(--line-med); }
+
+.nav-btn {
+  display: flex; align-items: center;
+  padding: 10px 24px;
+  background: var(--acid);
+  color: var(--ink);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: .02em;
+  transition: background .2s, transform .2s;
+}
+.nav-btn:hover { background: var(--white); transform: translateY(-1px); }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+#hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0 52px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-glow {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 70% 35%, rgba(200,245,58,.055) 0%, transparent 65%),
+    radial-gradient(ellipse 35% 35% at 90% 10%, rgba(200,245,58,.03) 0%, transparent 55%);
+  z-index: 0;
+}
+
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 100% 100% at 65% 45%, black 20%, transparent 75%);
+  animation: gGrid 32s linear infinite;
+  z-index: 0;
+}
+@keyframes gGrid {
+  to { transform: translate(80px,80px); }
+}
+
+/* Code block */
+.hero-code {
+  position: absolute; top: 50%; right: 7%;
+  transform: translateY(-52%);
+  background: rgba(22,22,26,.95);
+  border: 1px solid var(--line-med);
+  border-top: 2px solid var(--acid);
+  padding: 24px 28px 24px 28px;
+  font-size: 11.5px;
+  line-height: 2;
+  color: var(--fog);
+  width: 330px;
+  z-index: 2;
+  box-shadow: 0 48px 96px rgba(0,0,0,.7);
+  opacity: 0;
+  animation: codeIn .9s 1.3s var(--ease) forwards;
+}
+.hero-code-head {
+  display: flex; align-items: center; gap: 7px;
+  margin-bottom: 18px; padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot-r { background: #ff5f57; }
+.dot-y { background: #febc2e; }
+.dot-g { background: var(--acid); }
+.hero-code-file {
+  margin-left: auto;
+  font-size: 9px; letter-spacing: .1em;
+  color: var(--fog); opacity: .6;
+}
+
+.kw   { color: #7c86ff; }
+.fn   { color: var(--acid); }
+.str  { color: #f0a66a; }
+.cm   { color: #3a3a50; font-style: italic; }
+.tp   { color: #89d4f5; }
+.num  { color: #f0a66a; }
+
+@keyframes codeIn {
+  from { opacity: 0; transform: translateY(-52%) translateX(24px); }
+  to   { opacity: 1; transform: translateY(-52%) translateX(0); }
+}
+
+/* Hero content */
+.hero-available {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: var(--acid-dim);
+  border: 1px solid var(--acid-glow);
+  padding: 7px 16px;
+  font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--acid);
+  margin-bottom: 36px;
+  position: relative; z-index: 1;
+  opacity: 0; animation: up .7s .1s var(--ease) forwards;
+}
+.avail-pulse {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--acid);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:.25} }
+
+.hero-h1 {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 900;
+  font-size: clamp(68px, 9.5vw, 140px);
+  line-height: .88;
+  letter-spacing: -0.055em;
+  color: var(--white);
+  max-width: 780px;
+  position: relative; z-index: 1;
+  opacity: 0; animation: up .85s .25s var(--ease) forwards;
+}
+.hero-h1 .is { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--acid); }
+
+.hero-bottom {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-top: 56px;
+  position: relative; z-index: 1;
+  opacity: 0; animation: up .8s .45s var(--ease) forwards;
+}
+
+.hero-desc {
+  font-size: 13px; line-height: 2.1;
+  color: var(--fog); max-width: 420px;
+}
+
+.hero-actions { display: flex; gap: 12px; align-items: center; }
+
+.btn-solid {
+  padding: 15px 38px;
+  background: var(--acid);
+  color: var(--ink);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  transition: background .2s, transform .2s;
+}
+.btn-solid:hover { background: var(--white); transform: translateY(-2px); }
+
+.btn-outline {
+  padding: 15px 38px;
+  border: 1px solid var(--line-med);
+  color: var(--smoke);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  transition: border-color .2s, color .2s, transform .2s;
+}
+.btn-outline:hover { border-color: var(--smoke); color: var(--white); transform: translateY(-2px); }
+
+.scroll-line {
+  position: absolute; bottom: 28px; left: 52px;
+  display: flex; align-items: center; gap: 14px;
+  font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--fog);
+  opacity: 0; animation: up .6s 1s var(--ease) forwards;
+}
+.sl-bar { width: 44px; height: 1px; background: linear-gradient(90deg, var(--acid), transparent); }
+
+.hero-stats {
+  position: absolute; right: 52px; bottom: 28px;
+  display: flex; gap: 44px;
+  opacity: 0; animation: up .6s 1s var(--ease) forwards;
+}
+.hstat-n {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 900; font-size: 30px; letter-spacing: -0.05em;
+  color: var(--snow); line-height: 1;
+}
+.hstat-l { font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--fog); margin-top: 4px; }
+
+@keyframes up {
+  from { opacity:0; transform: translateY(26px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+/* ============================================================
+   TICKER
+   ============================================================ */
+.ticker {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+  background: var(--ink-soft);
+  padding: 13px 0;
+}
+.ticker-t {
+  display: flex; width: max-content;
+  animation: tick 24s linear infinite;
+}
+@keyframes tick { to { transform: translateX(-50%); } }
+.titem {
+  display: flex; align-items: center; gap: 28px;
+  padding: 0 28px;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase;
+  color: var(--fog); white-space: nowrap;
+}
+.titem s { text-decoration: none; color: var(--acid); font-size: 9px; }
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+.sec { padding: 128px 52px; }
+.sec-alt { background: var(--ink-soft); }
+
+.eyebrow {
+  display: flex; align-items: center; gap: 16px;
+  font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--acid);
+  margin-bottom: 64px;
+}
+.eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+.eyebrow-n { color: var(--fog); margin-left: auto; }
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.about-g {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 96px; align-items: start;
+}
+
+.about-h {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 900;
+  font-size: clamp(36px, 4.5vw, 60px);
+  letter-spacing: -0.045em; line-height: .95;
+  color: var(--white); margin-bottom: 32px;
+}
+.about-h em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--acid); }
+
+.about-p { font-size: 13px; line-height: 2.1; color: var(--fog); margin-bottom: 18px; }
+
+.stats-g {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; margin-top: 48px;
+  outline: 1px solid var(--line);
+}
+.stat-c {
+  padding: 26px 22px;
+  background: var(--ink);
+  border: 1px solid var(--line);
+  transition: background .25s;
+}
+.stat-c:hover { background: rgba(200,245,58,.04); }
+.stat-n {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 900; font-size: 46px;
+  letter-spacing: -0.05em; color: var(--acid); line-height: 1;
+  margin-bottom: 5px;
+}
+.stat-l { font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--fog); }
+
+/* Skills */
+.skills-list { display: flex; flex-direction: column; gap: 1px; }
+.sk {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 17px 22px;
+  background: var(--ink-soft);
+  border: 1px solid var(--line);
+  position: relative; overflow: hidden;
+  transition: border-color .25s;
+}
+.sk::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--acid-dim);
+  transform: translateX(-100%);
+  transition: transform .4s var(--ease);
+}
+.sk:hover::before { transform: translateX(0); }
+.sk:hover { border-color: rgba(200,245,58,.28); }
+.sk-n {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 14px; font-weight: 700; color: var(--snow);
+  position: relative; z-index: 1;
+}
+.sk-chips { display: flex; gap: 6px; position: relative; z-index: 1; }
+.chip {
+  padding: 3px 9px;
+  border: 1px solid var(--line-med);
+  font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--fog);
+}
+
+/* ============================================================
+   PROJECTS — TABBED SYSTEM
+   ============================================================ */
+.proj-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 48px;
+}
+.proj-title {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 900;
+  font-size: clamp(38px, 5vw, 74px);
+  letter-spacing: -0.05em; line-height: .9;
+  color: var(--white);
+}
+.see-all {
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--acid);
+  display: flex; align-items: center; gap: 7px;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: border-color .2s;
+}
+.see-all:hover { border-color: var(--acid); }
+
+/* Tab bar */
+.proj-tabs {
+  display: flex; gap: 2px;
+  margin-bottom: 2px;
+  flex-wrap: wrap;
+}
+.ptab {
+  padding: 12px 24px;
+  background: var(--ink-soft);
+  border: 1px solid var(--line);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: .04em; text-transform: uppercase;
+  color: var(--fog);
+  transition: background .2s, border-color .2s, color .2s;
+  display: flex; align-items: center; gap: 9px;
+}
+.ptab:hover { color: var(--snow); border-color: var(--line-med); }
+.ptab.active {
+  background: var(--acid);
+  color: var(--ink);
+  border-color: var(--acid);
+}
+.ptab-count {
+  font-size: 9px;
+  opacity: .7;
+  font-weight: 400;
+}
+
+/* Tab panels */
+.proj-panel { display: none; }
+.proj-panel.active { display: block; }
+
+/* Grid */
+.pgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+.pgrid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+.pc {
+  background: var(--ink-soft);
+  border: 1px solid var(--line);
+  padding: 34px 30px;
+  display: flex; flex-direction: column;
+  position: relative; overflow: hidden;
+  transition: border-color .3s, background .3s;
+}
+.pc::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px; background: var(--acid);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .5s var(--ease);
+}
+.pc:hover::before { transform: scaleX(1); }
+.pc:hover { border-color: rgba(200,245,58,.25); background: rgba(200,245,58,.018); }
+.pc:hover .pc-arrow { transform: translate(4px,-4px); color: var(--acid); }
+
+/* Featured card spans 2 cols */
+.pc.feat { grid-column: span 2; }
+
+.pc-cat {
+  font-size: 9px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--acid); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.pc-cat-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--acid); }
+
+.pc-t {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: clamp(16px, 1.5vw, 22px);
+  letter-spacing: -0.03em; line-height: 1.2;
+  color: var(--white); margin-bottom: 10px;
+  flex: 1;
+}
+.pc-d-text { font-size: 12px; line-height: 1.9; color: var(--fog); margin-bottom: 24px; }
+.pc-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 16px; border-top: 1px solid var(--line);
+  margin-top: auto;
+}
+.pc-stack { font-size: 10px; letter-spacing: .05em; color: var(--fog); flex: 1; padding-right: 12px; }
+.pc-arrow { font-size: 20px; color: var(--smoke); line-height: 1; flex-shrink: 0; transition: transform .3s var(--ease), color .3s; }
+
+/* Elite panel — special cards */
+.elite-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+.elite-card {
+  padding: 40px 36px;
+  background: var(--ink-soft);
+  border: 1px solid var(--line);
+  position: relative; overflow: hidden;
+  transition: border-color .3s, background .3s;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.elite-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(200,245,58,.04) 0%, transparent 55%);
+  opacity: 0; transition: opacity .4s;
+}
+.elite-card:hover::after { opacity: 1; }
+.elite-card:hover { border-color: rgba(200,245,58,.3); }
+.elite-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 12px;
+  background: rgba(200,245,58,.1);
+  border: 1px solid rgba(200,245,58,.25);
+  font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--acid);
+  width: fit-content;
+}
+.elite-t {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800; font-size: clamp(18px, 2vw, 26px);
+  letter-spacing: -0.03em; line-height: 1.15; color: var(--white);
+}
+.elite-desc { font-size: 12px; line-height: 1.9; color: var(--fog); flex: 1; }
+.elite-foot {
+  padding-top: 20px; border-top: 1px solid var(--line);
+  font-size: 10px; letter-spacing: .06em; color: var(--fog);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.elite-arrow { font-size: 20px; color: var(--acid); }
+
+/* mini bar chart */
+.mini-chart { display: flex; align-items: flex-end; gap: 7px; height: 90px; padding: 12px; }
+.mb {
+  width: 14px; background: rgba(255,255,255,.05);
+  border-top: 2px solid transparent;
+}
+.mb.active { border-color: var(--acid); background: rgba(200,245,58,.15); }
+
+@media (max-width: 1060px) {
+  .pgrid { grid-template-columns: 1fr 1fr; }
+  .pgrid.cols-4 { grid-template-columns: 1fr 1fr; }
+  .pc.feat { grid-column: span 2; }
+  .elite-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 680px) {
+  .pgrid, .pgrid.cols-4 { grid-template-columns: 1fr; }
+  .pc.feat { grid-column: span 1; }
+  .proj-tabs { gap: 1px; }
+  .ptab { padding: 10px 16px; font-size: 11px; }
+}
+
+/* ============================================================
+   SERVICES
+   ============================================================ */
+.svc-layout {
+  display: grid; grid-template-columns: 320px 1fr;
+  gap: 80px; align-items: start;
+}
+.svc-intro-h {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 900;
+  font-size: clamp(36px, 4vw, 54px);
+  letter-spacing: -0.04em; line-height: .98;
+  color: var(--white); margin-bottom: 22px;
+}
+.svc-intro-h em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--acid); }
+.svc-intro-p { font-size: 12px; line-height: 2; color: var(--fog); }
+
+.svc-list { display: flex; flex-direction: column; gap: 1px; }
+.svc-item {
+  display: flex; align-items: flex-start; gap: 24px;
+  padding: 30px 26px;
+  background: var(--ink);
+  border: 1px solid var(--line);
+  transition: border-color .25s, background .25s;
+  position: relative;
+}
+.svc-item::after {
+  content: '↗'; position: absolute; right: 26px; top: 30px;
+  font-size: 17px; color: var(--fog);
+  transition: transform .3s var(--ease), color .3s;
+}
+.svc-item:hover { border-color: rgba(200,245,58,.28); background: rgba(200,245,58,.02); }
+.svc-item:hover::after { transform: translate(4px,-4px); color: var(--acid); }
+.svc-icon {
+  width: 42px; height: 42px; flex-shrink: 0;
+  border: 1px solid var(--line-med);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; color: var(--acid);
+  transition: background .25s;
+}
+.svc-item:hover .svc-icon { background: var(--acid-dim); }
+.svc-t {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800; font-size: 17px; letter-spacing: -0.02em;
+  color: var(--white); margin-bottom: 7px;
+}
+.svc-p { font-size: 12px; line-height: 1.9; color: var(--fog); max-width: 520px; }
+
+/* ============================================================
+   PROCESS
+   ============================================================ */
+.process-g {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 2px;
+}
+.proc {
+  padding: 40px 30px;
+  background: var(--ink-soft);
+  border: 1px solid var(--line);
+  transition: border-color .25s, background .25s;
+}
+.proc:hover { background: rgba(200,245,58,.025); border-color: rgba(200,245,58,.22); }
+.proc-n {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 68px; font-weight: 900; letter-spacing: -0.07em;
+  color: rgba(200,245,58,.07); line-height: 1; margin-bottom: 18px;
+  transition: color .25s;
+}
+.proc:hover .proc-n { color: rgba(200,245,58,.18); }
+.proc-t {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 16px; font-weight: 800;
+  color: var(--white); letter-spacing: -0.02em; margin-bottom: 10px;
+}
+.proc-p { font-size: 12px; line-height: 1.9; color: var(--fog); }
+
+/* ============================================================
+   STACK
+   ============================================================ */
+.stack-top {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 56px;
+}
+.stack-h {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 900;
+  font-size: clamp(38px, 5vw, 66px);
+  letter-spacing: -0.05em; line-height: .92;
+  color: var(--white);
+}
+.stack-sub { font-size: 12px; color: var(--fog); max-width: 270px; text-align: right; line-height: 1.9; }
+
+.stack-g { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+.sg-head {
+  padding: 14px 20px;
+  background: rgba(200,245,58,.07);
+  border: 1px solid rgba(200,245,58,.18);
+  font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--acid);
+  margin-bottom: 1px;
+}
+.sg-items { display: flex; flex-direction: column; gap: 1px; }
+.sg-item {
+  padding: 13px 20px;
+  background: var(--ink-soft); border: 1px solid var(--line);
+  font-size: 12px; color: var(--smoke);
+  display: flex; align-items: center; gap: 12px;
+  transition: background .2s, border-color .2s, color .2s;
+}
+.sg-item::before {
+  content: ''; width: 4px; height: 4px; border-radius: 50%;
+  background: var(--fog); flex-shrink: 0;
+  transition: background .2s;
+}
+.sg-item:hover { background: rgba(200,245,58,.04); border-color: rgba(200,245,58,.2); color: var(--white); }
+.sg-item:hover::before { background: var(--acid); }
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.contact-g {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: start;
+}
+
+.contact-h {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 900;
+  font-size: clamp(44px, 6vw, 90px);
+  letter-spacing: -0.055em; line-height: .88;
+  color: var(--white); margin-bottom: 26px;
+}
+.contact-h em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--acid); display: block; }
+
+.contact-sub { font-size: 13px; line-height: 2; color: var(--fog); margin-bottom: 44px; }
+
+.contact-items { display: flex; flex-direction: column; gap: 1px; }
+.ci {
+  display: flex; align-items: center; gap: 18px;
+  padding: 17px 20px; border: 1px solid var(--line);
+  font-size: 12px; color: var(--smoke);
+  transition: border-color .2s, color .2s, background .2s;
+}
+.ci:hover { border-color: rgba(200,245,58,.3); color: var(--white); background: rgba(200,245,58,.03); }
+.ci-i { font-size: 13px; color: var(--acid); opacity: .75; width: 18px; text-align: center; }
+
+/* Form */
+.form { display: flex; flex-direction: column; gap: 1px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; }
+.form input, .form textarea {
+  background: var(--ink-soft);
+  border: 1px solid var(--line);
+  padding: 18px 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; font-weight: 300;
+  color: var(--snow); width: 100%;
+  outline: none;
+  transition: border-color .2s, background .2s;
+}
+.form input::placeholder, .form textarea::placeholder { color: var(--fog); font-size: 11px; }
+.form input:focus, .form textarea:focus {
+  border-color: rgba(200,245,58,.38);
+  background: rgba(200,245,58,.018);
+}
+.form textarea { min-height: 150px; resize: none; }
+.form-submit {
+  display: inline-flex; align-items: center; gap: 10px;
+  align-self: flex-start;
+  padding: 17px 36px;
+  background: var(--acid); color: var(--ink);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 800; font-size: 14px;
+  transition: background .2s, transform .2s;
+}
+.form-submit:hover { background: var(--white); transform: translateY(-2px); }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  background: var(--ink-soft);
+  border-top: 1px solid var(--line);
+  padding: 36px 52px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.f-logo {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 900; font-size: 18px; letter-spacing: -0.03em;
+  color: var(--white);
+}
+.f-logo em { font-style: normal; color: var(--acid); }
+.f-copy { font-size: 10px; letter-spacing: .1em; color: var(--fog); }
+.f-links { display: flex; gap: 28px; }
+.f-links a { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--fog); transition: color .2s; }
+.f-links a:hover { color: var(--acid); }
+
+/* ============================================================
+   REVEAL
+   ============================================================ */
+.r {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity .75s var(--ease), transform .75s var(--ease);
+}
+.r.in { opacity: 1; transform: translateY(0); }
+.d1 { transition-delay: .1s; }
+.d2 { transition-delay: .2s; }
+.d3 { transition-delay: .3s; }
+.d4 { transition-delay: .4s; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1060px) {
+  .hero-code { display: none; }
+  .about-g, .contact-g { grid-template-columns: 1fr; gap: 52px; }
+  .svc-layout { grid-template-columns: 1fr; gap: 44px; }
+  .pc-a { grid-column: 1/13; }
+  .pc-b { grid-column: 1/13; }
+  .pc-c, .pc-d { grid-column: span 6; }
+  .pc-e { grid-column: 1/13; }
+  .pc-f { grid-column: 1/13; flex-direction: column; }
+  .pc-f .pc-visual { width: 100%; }
+  .process-g { grid-template-columns: 1fr 1fr; }
+  .stack-g { grid-template-columns: 1fr 1fr; }
+  .stack-top { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .stack-sub { text-align: left; }
+}
+@media (max-width: 680px) {
+  nav { padding: 0 24px; }
+  .nav-links { display: none; }
+  .sec { padding: 80px 24px; }
+  #hero { padding: 0 24px 80px; }
+  .hero-bottom { flex-direction: column; align-items: flex-start; gap: 32px; }
+  .hero-stats { position: static; flex-wrap: wrap; gap: 24px; margin-top: 24px; }
+  .scroll-line { display: none; }
+  .pc-c, .pc-d { grid-column: 1/13; }
+  .stack-g { grid-template-columns: 1fr; }
+  .process-g { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 18px; text-align: center; }
+  .form-row { grid-template-columns: 1fr; }
+  .proj-head { flex-direction: column; gap: 16px; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Ador<em>dev</em></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#stack">Stack</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-btn">Hire Me</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-code">
+    <div class="hero-code-head">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+      <div class="hero-code-file">auth.controller.ts</div>
+    </div>
+    <span class="cm">// Adordev — clean, typed, production-ready</span><br>
+    <span class="kw">import</span> { <span class="tp">Controller</span>, <span class="tp">Post</span>, <span class="tp">Body</span> }<br>
+    &nbsp;&nbsp;<span class="kw">from</span> <span class="str">'@nestjs/common'</span>;<br>
+    <br>
+    @<span class="fn">Controller</span>(<span class="str">'auth'</span>)<br>
+    <span class="kw">export class</span> <span class="fn">AuthController</span> {<br>
+    &nbsp;&nbsp;<span class="kw">constructor</span>(<span class="kw">private</span> <span class="tp">authSvc</span>: <span class="tp">AuthService</span>) {}<br>
+    <br>
+    &nbsp;&nbsp;@<span class="fn">Post</span>(<span class="str">'login'</span>)<br>
+    &nbsp;&nbsp;<span class="kw">async</span> <span class="fn">login</span>(@<span class="fn">Body</span>() <span class="tp">dto</span>: <span class="tp">LoginDto</span>) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="kw">this</span>.<span class="tp">authSvc</span>.<span class="fn">issueToken</span>(<span class="tp">dto</span>);<br>
+    &nbsp;&nbsp;}<br>
+    }
+  </div>
+
+  <div class="hero-available"><div class="avail-pulse"></div>Available for new projects</div>
+
+  <h1 class="hero-h1">
+    Software<br>
+    <span class="is">Engineer</span>
+  </h1>
+
+  <div class="hero-bottom">
+    <p class="hero-desc">
+      I'm Adordev — a software engineer based in Abuja, Nigeria. I build high-performance backend systems with modern tech stacks and cross-platform mobile apps that users love. From REST APIs to production-ready mobile apps, I ship things that work.
+    </p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-solid">View Work</a>
+      <a href="#contact" class="btn-outline">Get In Touch</a>
+    </div>
+  </div>
+
+  <div class="scroll-line">
+    <div class="sl-bar"></div>
+    Scroll to explore
+  </div>
+
+  <div class="hero-stats">
+    <div>
+      <div class="hstat-n">15+</div>
+      <div class="hstat-l">Projects Shipped</div>
+    </div>
+    <div>
+      <div class="hstat-n">5+</div>
+      <div class="hstat-l">Years Coding</div>
+    </div>
+    <div>
+      <div class="hstat-n">100%</div>
+      <div class="hstat-l">Client Satisfaction</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-t">
+    <div class="titem">Node.js <s>✦</s></div>
+    <div class="titem">NestJS <s>✦</s></div>
+    <div class="titem">TypeScript <s>✦</s></div>
+    <div class="titem">React Native <s>✦</s></div>
+    <div class="titem">Flutter <s>✦</s></div>
+    <div class="titem">PostgreSQL <s>✦</s></div>
+    <div class="titem">REST APIs <s>✦</s></div>
+    <div class="titem">GraphQL <s>✦</s></div>
+    <div class="titem">Docker <s>✦</s></div>
+    <div class="titem">Redis <s>✦</s></div>
+    <div class="titem">OAuth 2.0 <s>✦</s></div>
+    <div class="titem">AWS <s>✦</s></div>
+    <div class="titem">Node.js <s>✦</s></div>
+    <div class="titem">NestJS <s>✦</s></div>
+    <div class="titem">TypeScript <s>✦</s></div>
+    <div class="titem">React Native <s>✦</s></div>
+    <div class="titem">Flutter <s>✦</s></div>
+    <div class="titem">PostgreSQL <s>✦</s></div>
+    <div class="titem">REST APIs <s>✦</s></div>
+    <div class="titem">GraphQL <s>✦</s></div>
+    <div class="titem">Docker <s>✦</s></div>
+    <div class="titem">Redis <s>✦</s></div>
+    <div class="titem">OAuth 2.0 <s>✦</s></div>
+    <div class="titem">AWS <s>✦</s></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="sec sec-alt">
+  <div class="eyebrow r"><span>About</span><span class="eyebrow-n">01</span></div>
+  <div class="about-g">
+    <div>
+      <h2 class="about-h r">I build systems<br>that <em>scale</em></h2>
+      <p class="about-p r">I'm Adordev — a software engineer with 5+ years building production systems. My focus is modern backend engineering and cross-platform mobile apps. I write code that's clean, tested, and built to survive real-world traffic.</p>
+      <p class="about-p r d1">From designing high-performance REST APIs and microservices to shipping mobile apps on iOS and Android, I own the full product stack — backend, database, infrastructure, and mobile. I pick the right tool for the job, not the most familiar one.</p>
+      <div class="stats-g r d2">
+        <div class="stat-c"><div class="stat-n" data-count="15" data-suffix="+">0</div><div class="stat-l">Projects Delivered</div></div>
+        <div class="stat-c"><div class="stat-n" data-count="5" data-suffix="+">0</div><div class="stat-l">Years Experience</div></div>
+        <div class="stat-c"><div class="stat-n">∞</div><div class="stat-l">Lines of Code</div></div>
+        <div class="stat-c"><div class="stat-n" data-count="24" data-suffix="h">0</div><div class="stat-l">Response Time</div></div>
+      </div>
+    </div>
+    <div class="skills-list r d1">
+      <div class="sk"><span class="sk-n">Backend Development</span><div class="sk-chips"><span class="chip">Node.js</span><span class="chip">NestJS</span></div></div>
+      <div class="sk"><span class="sk-n">API Engineering</span><div class="sk-chips"><span class="chip">REST</span><span class="chip">GraphQL</span></div></div>
+      <div class="sk"><span class="sk-n">Mobile Development</span><div class="sk-chips"><span class="chip">React Native</span><span class="chip">Flutter</span></div></div>
+      <div class="sk"><span class="sk-n">Database Architecture</span><div class="sk-chips"><span class="chip">PostgreSQL</span><span class="chip">MongoDB</span></div></div>
+      <div class="sk"><span class="sk-n">Auth & Security</span><div class="sk-chips"><span class="chip">OAuth 2.0</span><span class="chip">JWT</span></div></div>
+      <div class="sk"><span class="sk-n">Cloud & Infrastructure</span><div class="sk-chips"><span class="chip">AWS</span><span class="chip">Docker</span></div></div>
+      <div class="sk"><span class="sk-n">Real-time Systems</span><div class="sk-chips"><span class="chip">WebSockets</span><span class="chip">Redis</span></div></div>
+      <div class="sk"><span class="sk-n">DevOps & CI/CD</span><div class="sk-chips"><span class="chip">GitHub Actions</span><span class="chip">Linux</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="sec">
+  <div class="eyebrow r"><span>Projects</span><span class="eyebrow-n">02</span></div>
+  <div class="proj-head">
+    <h2 class="proj-title r">Selected<br>Work</h2>
+    <a href="#" class="see-all r">View all →</a>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="proj-tabs r">
+    <button class="ptab active" data-tab="frontend">Frontend <span class="ptab-count">08</span></button>
+    <button class="ptab" data-tab="backend">Backend <span class="ptab-count">08</span></button>
+    <button class="ptab" data-tab="mobile">Mobile <span class="ptab-count">08</span></button>
+    <button class="ptab" data-tab="elite">Elite <span class="ptab-count">05</span></button>
+  </div>
+
+  <!-- ── FRONTEND ─────────────────────────── -->
+  <div class="proj-panel active" id="panel-frontend">
+    <div class="pgrid">
+
+      <div class="pc feat r">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>Featured · UI/UX</div>
+        <div class="pc-t">AI SaaS Dashboard</div>
+        <div class="pc-d-text">Fully interactive analytics platform with real-time charts, dark/light mode, role-based views, and live data streaming. Built for enterprise-grade data display with smooth micro-animations throughout.</div>
+        <div class="pc-foot"><span class="pc-stack">React · TypeScript · Recharts · TailwindCSS · WebSockets</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r d1">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>Performance</div>
+        <div class="pc-t">High-Converting Landing Page</div>
+        <div class="pc-d-text">Startup landing page with parallax scrolling, GSAP animations, and 95+ Lighthouse score. Optimised for Core Web Vitals and conversion rate.</div>
+        <div class="pc-foot"><span class="pc-stack">Next.js · GSAP · TailwindCSS · Vercel</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>E-Commerce</div>
+        <div class="pc-t">E-Commerce Frontend</div>
+        <div class="pc-d-text">Full shopping experience — product filtering, cart management, Stripe checkout, wishlist, and review system with optimistic UI updates.</div>
+        <div class="pc-foot"><span class="pc-stack">React · Redux · Stripe.js · CSS Modules</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r d1">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>Real-Time</div>
+        <div class="pc-t">Real-Time Chat Interface</div>
+        <div class="pc-d-text">Web chat UI with typing indicators, file sharing, message reactions, read receipts, and thread-based replies. Pixel-perfect across all screen sizes.</div>
+        <div class="pc-foot"><span class="pc-stack">React · WebSockets · Framer Motion · IndexedDB</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>Productivity</div>
+        <div class="pc-t">Project Management UI</div>
+        <div class="pc-d-text">Notion/Trello-style board with drag-and-drop columns, task cards, priority labels, due dates, and keyboard shortcuts for power users.</div>
+        <div class="pc-foot"><span class="pc-stack">React · DnD Kit · Zustand · TailwindCSS</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r d1">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>AI-Powered</div>
+        <div class="pc-t">AI Image Generator App</div>
+        <div class="pc-d-text">Frontend for generating and previewing AI images — prompt input, style controls, generation history gallery, and one-click download.</div>
+        <div class="pc-foot"><span class="pc-stack">Next.js · OpenAI API · TailwindCSS · Cloudinary</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>Finance</div>
+        <div class="pc-t">Personal Finance Dashboard</div>
+        <div class="pc-d-text">Budget tracker with interactive charts, transaction history, category breakdowns, and spending trend visualisations with CSV export.</div>
+        <div class="pc-foot"><span class="pc-stack">React · Recharts · TailwindCSS · Vite</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r d1">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>SaaS Tool</div>
+        <div class="pc-t">Portfolio Builder App</div>
+        <div class="pc-d-text">No-code portfolio creator — users pick from themes, drag sections, edit content live, and publish with one click. Full template marketplace.</div>
+        <div class="pc-foot"><span class="pc-stack">Next.js · Prisma · Cloudflare · TailwindCSS</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── BACKEND ──────────────────────────── -->
+  <div class="proj-panel" id="panel-backend">
+    <div class="pgrid">
+
+      <div class="pc feat r">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>Featured · SaaS</div>
+        <div class="pc-t">Scalable SaaS Backend</div>
+        <div class="pc-d-text">Production-ready REST API with JWT auth, RBAC, rate limiting, request logging, health monitoring, and OpenAPI documentation. Designed for multi-tenant SaaS with isolated data per organisation.</div>
+        <div class="pc-foot"><span class="pc-stack">NestJS · TypeScript · PostgreSQL · Redis · Docker · AWS</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r d1">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>E-Commerce</div>
+        <div class="pc-t">E-Commerce Backend</div>
+        <div class="pc-d-text">Inventory system, order processing pipeline, Stripe payment integration, and admin panel. Handles 10,000+ concurrent SKUs with stock sync webhooks.</div>
+        <div class="pc-foot"><span class="pc-stack">Node.js · PostgreSQL · Stripe API · Redis</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>Real-Time</div>
+        <div class="pc-t">Real-Time Chat Server</div>
+        <div class="pc-d-text">WebSocket-based messaging server with rooms, presence tracking, message persistence, and delivery receipts. Scales horizontally with Redis pub/sub.</div>
+        <div class="pc-foot"><span class="pc-stack">Node.js · Socket.io · Redis · MongoDB</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r d1">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>Architecture</div>
+        <div class="pc-t">Microservices Platform</div>
+        <div class="pc-d-text">Separate services for auth, payments, users, and notifications — communicating via message queues with an API gateway as the single entry point.</div>
+        <div class="pc-foot"><span class="pc-stack">NestJS · RabbitMQ · Docker · Kubernetes</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>Security</div>
+        <div class="pc-t">Authentication System</div>
+        <div class="pc-d-text">OAuth with Google/GitHub login, password reset flows, email verification, two-factor authentication, and session management with refresh token rotation.</div>
+        <div class="pc-foot"><span class="pc-stack">NestJS · Passport.js · JWT · Nodemailer</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r d1">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>AI Integration</div>
+        <div class="pc-t">AI Model API Wrapper</div>
+        <div class="pc-d-text">Backend that proxies AI services (OpenAI, Anthropic), handles prompt storage, response caching, usage metering, and per-user rate limiting.</div>
+        <div class="pc-foot"><span class="pc-stack">Node.js · OpenAI SDK · Redis · PostgreSQL</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>Multi-Tenant</div>
+        <div class="pc-t">Multi-Tenant SaaS Platform</div>
+        <div class="pc-d-text">Schema-based multi-tenancy supporting multiple organisations with fully isolated databases, custom domains, and per-tenant billing via Stripe.</div>
+        <div class="pc-foot"><span class="pc-stack">NestJS · PostgreSQL · Stripe · Docker</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r d1">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>DevOps</div>
+        <div class="pc-t">Cloud Deployment Project</div>
+        <div class="pc-d-text">Dockerized application deployed to AWS with automated CI/CD pipeline, environment secrets management, load balancing, and zero-downtime deployments.</div>
+        <div class="pc-foot"><span class="pc-stack">Docker · AWS EC2/RDS/S3 · GitHub Actions · Nginx</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── MOBILE ───────────────────────────── -->
+  <div class="proj-panel" id="panel-mobile">
+    <div class="pgrid">
+
+      <div class="pc feat r">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>Featured · Fintech</div>
+        <div class="pc-t">Fintech Wallet App</div>
+        <div class="pc-d-text">Full-featured digital wallet with peer-to-peer transfers, transaction history, spending insights, biometric login (Face ID / fingerprint), and real-time balance updates via WebSockets.</div>
+        <div class="pc-foot"><span class="pc-stack">React Native · NestJS · PostgreSQL · Stripe · Biometrics API</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r d1">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>Social</div>
+        <div class="pc-t">Social Media App</div>
+        <div class="pc-d-text">Profiles, posts, likes and comments, real-time notifications, story/reels feed, direct messaging, and an explore discovery algorithm.</div>
+        <div class="pc-foot"><span class="pc-stack">React Native · Node.js · MongoDB · Firebase</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>AI Productivity</div>
+        <div class="pc-t">AI Productivity App</div>
+        <div class="pc-d-text">Voice-to-text note taking, smart reminders, AI summaries of long notes, and task generation from natural language — all working offline-first.</div>
+        <div class="pc-foot"><span class="pc-stack">Flutter · Dart · OpenAI · SQLite · Speech SDK</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r d1">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>On-Demand</div>
+        <div class="pc-t">Food Delivery App</div>
+        <div class="pc-d-text">Restaurant browsing with filters, live order tracking on a map, multi-step checkout with payment gateway, and driver location updates in real time.</div>
+        <div class="pc-foot"><span class="pc-stack">React Native · Node.js · Google Maps SDK · Stripe</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>Health & Fitness</div>
+        <div class="pc-t">Fitness Tracker App</div>
+        <div class="pc-d-text">Workout logging, custom plan builder, progress charts over time, and Apple Watch / Wear OS integration for heart rate and step tracking.</div>
+        <div class="pc-foot"><span class="pc-stack">Flutter · HealthKit · WearOS · Firebase · Dart</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r d1">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>Ride-Hailing</div>
+        <div class="pc-t">Ride-Hailing App</div>
+        <div class="pc-d-text">Live GPS tracking, driver-passenger matching algorithm, surge pricing, trip history, in-app payments, and real-time ETA calculations.</div>
+        <div class="pc-foot"><span class="pc-stack">React Native · Node.js · Google Maps · WebSockets</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>EdTech</div>
+        <div class="pc-t">Learning Management App</div>
+        <div class="pc-d-text">Video lesson streaming, interactive quiz system, progress tracking across courses, certificate generation, and offline download for lectures.</div>
+        <div class="pc-foot"><span class="pc-stack">Flutter · Node.js · AWS S3 · Video.js · SQLite</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+      <div class="pc r d1">
+        <div class="pc-cat"><div class="pc-cat-dot"></div>Crypto</div>
+        <div class="pc-t">Crypto Portfolio Tracker</div>
+        <div class="pc-d-text">Live price feeds, portfolio P&L analytics, custom price alerts, multi-wallet support, and historical performance charts with candlestick views.</div>
+        <div class="pc-foot"><span class="pc-stack">React Native · CoinGecko API · SQLite · Recharts</span><span class="pc-arrow">↗</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── ELITE ────────────────────────────── -->
+  <div class="proj-panel" id="panel-elite">
+    <div class="elite-grid">
+
+      <div class="elite-card r">
+        <div class="elite-badge">✦ Elite Full-Stack</div>
+        <div class="elite-t">AI-Powered SaaS Platform</div>
+        <p class="elite-desc">End-to-end SaaS product combining a React frontend, NestJS backend, and React Native mobile app — all powered by AI features including smart summarisation, auto-tagging, and predictive recommendations. Multi-tenant, Stripe billing, and deployed on AWS.</p>
+        <div class="elite-foot"><span>React · React Native · NestJS · OpenAI · AWS · Stripe</span><span class="elite-arrow">↗</span></div>
+      </div>
+
+      <div class="elite-card r d1">
+        <div class="elite-badge">✦ Speed Build</div>
+        <div class="elite-t">Startup MVP — 30 Days</div>
+        <p class="elite-desc">Full production-ready MVP shipped in under 30 days — from zero to live with auth, payments, core feature set, mobile app, and CI/CD pipeline. Proof that speed and quality aren't mutually exclusive.</p>
+        <div class="elite-foot"><span>Next.js · NestJS · Flutter · Stripe · Docker · AWS</span><span class="elite-arrow">↗</span></div>
+      </div>
+
+      <div class="elite-card r">
+        <div class="elite-badge">✦ Real-Time Collab</div>
+        <div class="elite-t">Real-Time Collaboration App</div>
+        <p class="elite-desc">Google Docs-style collaborative editing with operational transforms (OT) for conflict resolution, live cursors, inline comments, version history, and offline sync. Works across web and mobile.</p>
+        <div class="elite-foot"><span>React · Node.js · WebSockets · OT.js · MongoDB</span><span class="elite-arrow">↗</span></div>
+      </div>
+
+      <div class="elite-card r d1">
+        <div class="elite-badge">✦ Developer Tool</div>
+        <div class="elite-t">Developer Tool Platform</div>
+        <p class="elite-desc">API testing tool (like Postman) and code snippet sharing platform in one — with team workspaces, environment variables, test assertions, and a public snippet marketplace for developers.</p>
+        <div class="elite-foot"><span>React · NestJS · PostgreSQL · Monaco Editor · Docker</span><span class="elite-arrow">↗</span></div>
+      </div>
+
+      <div class="elite-card r" style="grid-column: 1 / -1;">
+        <div class="elite-badge">✦ Web3 · Blockchain</div>
+        <div class="elite-t">Blockchain-Based Voting System</div>
+        <p class="elite-desc">Transparent, tamper-proof voting platform built on smart contracts. Voters authenticate with wallet signatures, ballots are stored on-chain, and results are publicly verifiable in real time — zero trust required. Includes a mobile voter app and an admin election dashboard.</p>
+        <div class="elite-foot"><span>Solidity · Ethereum · Hardhat · React · React Native · Web3.js · IPFS</span><span class="elite-arrow">↗</span></div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="sec sec-alt">
+  <div class="eyebrow r"><span>Services</span><span class="eyebrow-n">03</span></div>
+  <div class="svc-layout">
+    <div>
+      <h2 class="svc-intro-h r">What I<br><em>build</em></h2>
+      <p class="svc-intro-p r d1">I take products from idea to production — backend systems, mobile apps, APIs, and infrastructure. Every service below is something I deliver end-to-end.</p>
+    </div>
+    <div class="svc-list">
+      <div class="svc-item r">
+        <div class="svc-icon">⬡</div>
+        <div>
+          <div class="svc-t">Backend Development</div>
+          <p class="svc-p">High-performance backend systems built with modern stacks — Node.js, NestJS, and TypeScript. Microservices, monoliths, background processing, event-driven architectures — built clean, tested, and ready for scale.</p>
+        </div>
+      </div>
+      <div class="svc-item r d1">
+        <div class="svc-icon">◱</div>
+        <div>
+          <div class="svc-t">Mobile App Development</div>
+          <p class="svc-p">Cross-platform mobile apps for iOS and Android using React Native and Flutter. From concept to App Store — smooth UX, offline support, push notifications, and deep backend integration.</p>
+        </div>
+      </div>
+      <div class="svc-item r d2">
+        <div class="svc-icon">⟳</div>
+        <div>
+          <div class="svc-t">API Design & Development</div>
+          <p class="svc-p">REST and GraphQL APIs engineered for developer experience — versioning, OAuth 2.0 auth, rate limiting, webhook systems, and thorough documentation. Clean contracts, zero ambiguity.</p>
+        </div>
+      </div>
+      <div class="svc-item r d3">
+        <div class="svc-icon">◎</div>
+        <div>
+          <div class="svc-t">Database & Infrastructure</div>
+          <p class="svc-p">Schema design, query optimisation, and cloud deployment across PostgreSQL, MongoDB, and Redis on AWS or any cloud provider. Systems that stay fast and maintainable as you grow.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="sec">
+  <div class="eyebrow r"><span>Process</span><span class="eyebrow-n">04</span></div>
+  <div class="process-g">
+    <div class="proc r">
+      <div class="proc-n">01</div>
+      <div class="proc-t">Discovery</div>
+      <p class="proc-p">I start by deeply understanding your product, users, and technical constraints — before writing a single line of code.</p>
+    </div>
+    <div class="proc r d1">
+      <div class="proc-n">02</div>
+      <div class="proc-t">Architecture</div>
+      <p class="proc-p">I design the system architecture, database schema, and API contracts upfront — avoiding costly rewrites down the road.</p>
+    </div>
+    <div class="proc r d2">
+      <div class="proc-n">03</div>
+      <div class="proc-t">Build & Test</div>
+      <p class="proc-p">Feature development with test coverage, clean commit history, and regular check-ins. You always know exactly where things stand.</p>
+    </div>
+    <div class="proc r d3">
+      <div class="proc-n">04</div>
+      <div class="proc-t">Ship & Support</div>
+      <p class="proc-p">Deployment, handover documentation, and post-launch support. I don't disappear after the final PR is merged.</p>
+    </div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section id="stack" class="sec sec-alt">
+  <div class="eyebrow r"><span>Tech Stack</span><span class="eyebrow-n">05</span></div>
+  <div class="stack-top">
+    <h2 class="stack-h r">My tools<br>of choice</h2>
+    <p class="stack-sub r">Everything I use in production — no fluff, no hype. Just tools that get the job done reliably.</p>
+  </div>
+  <div class="stack-g">
+    <div class="r">
+      <div class="sg-head">Backend & APIs</div>
+      <div class="sg-items">
+        <div class="sg-item">Node.js</div>
+        <div class="sg-item">NestJS</div>
+        <div class="sg-item">TypeScript</div>
+        <div class="sg-item">Express.js</div>
+        <div class="sg-item">REST API Design</div>
+        <div class="sg-item">GraphQL</div>
+        <div class="sg-item">WebSockets</div>
+      </div>
+    </div>
+    <div class="r d1">
+      <div class="sg-head">Mobile Development</div>
+      <div class="sg-items">
+        <div class="sg-item">React Native</div>
+        <div class="sg-item">Flutter / Dart</div>
+        <div class="sg-item">Expo</div>
+        <div class="sg-item">iOS & Android</div>
+        <div class="sg-item">Push Notifications</div>
+        <div class="sg-item">Offline-first Apps</div>
+        <div class="sg-item">App Store Deployment</div>
+      </div>
+    </div>
+    <div class="r d2">
+      <div class="sg-head">Database, Cloud & DevOps</div>
+      <div class="sg-items">
+        <div class="sg-item">PostgreSQL</div>
+        <div class="sg-item">MongoDB</div>
+        <div class="sg-item">Redis</div>
+        <div class="sg-item">AWS (EC2, S3, RDS)</div>
+        <div class="sg-item">Docker & CI/CD</div>
+        <div class="sg-item">GitHub Actions</div>
+        <div class="sg-item">Linux / CLI / SSH</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="sec">
+  <div class="eyebrow r"><span>Contact</span><span class="eyebrow-n">06</span></div>
+  <div class="contact-g">
+    <div>
+      <h2 class="contact-h r">
+        Let's build<br>
+        <em>something</em><br>
+        great
+      </h2>
+      <p class="contact-sub r">Got a product to build, a mobile app to ship, or a backend that needs rescuing? Available for freelance, contract, and full-time engagements. Let's talk.</p>
+      <div class="contact-items r d1">
+        <a href="/cdn-cgi/l/email-protection#ed8c97888897849e9f8c8881d9d9ad8a808c8481c38e8280" class="ci"><span class="ci-i">✉</span><span class="__cf_email__" data-cfemail="f998839c9c83908a8b989c95cdcdb99e94989095d79a9694">[email&#160;protected]</span></a>
+        <a href="tel:+2348060264444" class="ci"><span class="ci-i">☎</span>+234 806 026 4444</a>
+        <div class="ci"><span class="ci-i">◎</span>Dawaki, Abuja, Nigeria</div>
+        <a href="#" class="ci"><span class="ci-i">⬡</span>Available on Fiverr & Upwork</a>
+      </div>
+    </div>
+    <div class="form r d1">
+      <div class="form-row">
+        <input type="text" placeholder="Your name">
+        <input type="email" placeholder="Email address">
+      </div>
+      <input type="text" placeholder="Subject / Project type">
+      <textarea placeholder="Tell me about your project — what are you building, what's the timeline, what do you need?"></textarea>
+      <button class="form-submit">Send Message →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-logo">Ador<em>dev</em></div>
+  <div class="f-copy">© 2026 Adordev · All rights reserved</div>
+  <div class="f-links">
+    <a href="#">Fiverr</a>
+    <a href="#">Upwork</a>
+    <a href="#">GitHub</a>
+    <a href="#">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+/* --- Cursor --- */
+const dot = document.getElementById('cur-dot');
+const ring = document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+
+document.addEventListener('mousemove', e=>{
+  mx=e.clientX; my=e.clientY;
+  dot.style.left=mx+'px'; dot.style.top=my+'px';
+});
+(function loop(){
+  rx+=(mx-rx)*.09; ry+=(my-ry)*.09;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(loop);
+})();
+
+document.querySelectorAll('a,button,.pc,.elite-card,.svc-item,.sk,.sg-item,.proc,.stat-c,.ptab').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
+});
+
+/* --- Nav stuck --- */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('stuck',scrollY>60));
+
+/* --- Scroll reveal --- */
+const obs=new IntersectionObserver(es=>{
+  es.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);} });
+},{threshold:.08});
+document.querySelectorAll('.r').forEach(el=>obs.observe(el));
+
+/* --- Counter animation --- */
+function countUp(el){
+  const target=+el.dataset.count;
+  const suffix=el.dataset.suffix||'';
+  let val=0, dur=1600, fps=60;
+  const step=target/(dur/1000*fps);
+  const t=setInterval(()=>{
+    val+=step;
+    if(val>=target){el.textContent=target+suffix;clearInterval(t);}
+    else el.textContent=Math.floor(val)+suffix;
+  },1000/fps);
+}
+const cObs=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('[data-count]').forEach(countUp);
+      cObs.unobserve(e.target);
+    }
+  });
+},{threshold:.4});
+const sg=document.querySelector('.stats-g');
+if(sg) cObs.observe(sg);
+
+/* --- Project tabs --- */
+document.querySelectorAll('.ptab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    const key=tab.dataset.tab;
+    document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelectorAll('.proj-panel').forEach(p=>p.classList.remove('active'));
+    const panel=document.getElementById('panel-'+key);
+    if(panel){
+      panel.classList.add('active');
+      panel.querySelectorAll('.r:not(.in)').forEach(el=>obs.observe(el));
+    }
+  });
+});
+</script>
+</body>
+</html>
