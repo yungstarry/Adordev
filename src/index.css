@@ -1549,22 +1549,56 @@ footer .container {
   }
 }
 @media (max-width: 680px) {
-  nav {
+  .container {
     padding: 0 24px;
+  }
+  nav {
+    padding: 0;
   }
   .nav-links {
     display: none;
   }
   .sec {
-    padding: 80px 24px;
+    padding: 80px 0;
   }
   #hero {
-    padding: 0 24px 80px;
+    padding: 120px 0 60px;
+    min-height: auto;
+  }
+  #hero .container {
+    min-height: auto;
+    justify-content: flex-start;
+  }
+  .hero-h1 {
+    font-size: 48px;
+    margin-top: 20px;
+    max-width: 100%;
+  }
+  .hero-available {
+    margin-bottom: 24px;
+    font-size: 9px;
+    padding: 6px 14px;
   }
   .hero-bottom {
     flex-direction: column;
     align-items: flex-start;
     gap: 32px;
+    margin-top: 40px;
+  }
+  .hero-desc {
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  .hero-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .btn-solid,
+  .btn-outline {
+    width: 100%;
+    text-align: center;
+    padding: 18px 0;
   }
   .hero-bottom-row {
     flex-direction: column;
@@ -1589,10 +1623,21 @@ footer .container {
   .process-g {
     grid-template-columns: 1fr;
   }
-  footer {
+  footer .container {
     flex-direction: column;
-    gap: 18px;
+    gap: 24px;
     text-align: center;
+  }
+  .f-links {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .stats-g {
+    grid-template-columns: 1fr;
+  }
+  .stat-c {
+    padding: 32px 24px;
   }
   .form-row {
     grid-template-columns: 1fr;
