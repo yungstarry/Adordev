@@ -372,7 +372,7 @@ nav.stuck {
   border-radius: 100px;
   opacity: 0;
   animation: up 0.7s 0.2s var(--ease) forwards;
-  margin-top: 200px;
+  margin-top: 150px;
 }
 .avail-pulse {
   width: 6px;
