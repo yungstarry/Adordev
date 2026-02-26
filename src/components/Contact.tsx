@@ -59,9 +59,9 @@ const Contact: React.FC = () => {
               engagements. Let's talk.
             </p>
             <div className="contact-items r d1">
-              <a href="mailto:hello@adordev.com" className="ci">
+              {/* <a href="mailto:hello@adordev.com" className="ci">
                 <span className="ci-i">✉</span>hello@adordev.com
-              </a>
+              </a> */}
               <a href="tel:+2348060264444" className="ci">
                 <span className="ci-i">☎</span>+234 806 026 4444
               </a>
