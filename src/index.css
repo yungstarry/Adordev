@@ -368,6 +368,7 @@ nav.stuck {
   text-transform: uppercase;
   color: var(--acid);
   margin-bottom: 0px;
+  margin-top: 20px;
   width: fit-content;
   border-radius: 100px;
   opacity: 0;
