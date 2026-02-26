@@ -1587,6 +1587,7 @@ footer .container {
     margin-bottom: 24px;
     font-size: 9px;
     padding: 6px 14px;
+    margin-top: 0px;
   }
   .hero-bottom {
     flex-direction: column;
