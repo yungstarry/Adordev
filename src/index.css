@@ -233,7 +233,8 @@ nav.stuck {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  min-height: 100vh;
+
+ 
 }
 
 .hero-glow {
