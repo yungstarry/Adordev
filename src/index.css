@@ -1557,13 +1557,8 @@ footer .container {
   }
 }
 @media (max-width: 680px) {
-<<<<<<< HEAD
-  nav {
-    padding: 0;
-=======
   .container {
     padding: 0 24px;
->>>>>>> 4ca55f77c516b1604d46875b073dc5f32d5d1d01
   }
   nav {
     padding: 0;
@@ -1579,32 +1574,12 @@ footer .container {
     min-height: auto;
   }
   #hero .container {
-<<<<<<< HEAD
     min-height: auto;
     justify-content: flex-start;
   }
   .hero-h1 {
     font-size: clamp(42px, 10vw, 56px);
     margin-top: 20px;
-=======
-    grid-template-columns: 1fr;
-    gap: 40px;
-    padding-top: 100px;
-  }
-  .hero-content {
-    order: 1;
-  }
-  .hero-side {
-    order: 2;
-  }
-  .hero-code {
-    display: none;
-  }
-  .hero-h1 {
-    font-size: 48px;
-    margin-top: 20px;
-    max-width: 100%;
->>>>>>> 4ca55f77c516b1604d46875b073dc5f32d5d1d01
   }
   .hero-available {
     margin-bottom: 24px;
