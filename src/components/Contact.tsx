@@ -69,10 +69,10 @@ const Contact: React.FC = () => {
                 <span className="ci-i">☎</span>+234 806 026 4444
               </a>
               <div className="ci">
-                <span className="ci-i">◎</span>Dawaki, Abuja, Nigeria
+                <span className="ci-i">◎</span>Abuja, Nigeria
               </div>
-              <a href="#" className="ci">
-                <span className="ci-i">⬡</span>Available on Fiverr & Upwork
+              <a href="https://www.upwork.com/freelancers/~01a5d9a440962d6d60" target="_blank" rel="noopener noreferrer" className="ci">
+                <span className="ci-i">⬡</span>Available on Upwork & X
               </a>
             </div>
           </div>
