@@ -230,24 +230,10 @@ nav.stuck {
 #hero .container {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: 1fr 400px;
-  align-items: start;
-  gap: 40px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
   min-height: 100vh;
-  padding-top: 140px;
-  padding-bottom: 60px;
-}
-
-.hero-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.hero-side {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
 }
 
 .hero-glow {
@@ -290,7 +276,6 @@ nav.stuck {
 
 /* Code block */
 .hero-code {
-<<<<<<< HEAD
   position: absolute;
   top: 35%;
   right: 0;
@@ -303,17 +288,6 @@ nav.stuck {
   line-height: 1.8;
   color: var(--fog);
   width: 300px;
-=======
-  position: relative;
-  background: rgba(22, 22, 26, 0.95);
-  border: 1px solid var(--line-med);
-  border-top: 2px solid var(--acid);
-  padding: 24px 28px;
-  font-size: 11px;
-  line-height: 1.8;
-  color: var(--fog);
-  width: 100%;
->>>>>>> 4ca55f77c516b1604d46875b073dc5f32d5d1d01
   z-index: 2;
   box-shadow: 0 48px 96px rgba(0, 0, 0, 0.7);
   opacity: 0;
@@ -372,19 +346,11 @@ nav.stuck {
 @keyframes codeIn {
   from {
     opacity: 0;
-<<<<<<< HEAD
     transform: translateY(-50%) translateX(24px);
   }
   to {
     opacity: 1;
     transform: translateY(-50%) translateX(0);
-=======
-    transform: translateX(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
->>>>>>> 4ca55f77c516b1604d46875b073dc5f32d5d1d01
   }
 }
 
