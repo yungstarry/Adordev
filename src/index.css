@@ -126,6 +126,12 @@ body::after {
   width: 100%;
 }
 
+@media (max-width: 680px) {
+  .container {
+    padding: 0 24px;
+  }
+}
+
 /* ============================================================
    NAV
    ============================================================ */
@@ -271,17 +277,17 @@ nav.stuck {
 /* Code block */
 .hero-code {
   position: absolute;
-  top: 50%;
+  top: 35%;
   right: 0;
-  transform: translateY(-52%);
+  transform: translateY(-50%);
   background: rgba(22, 22, 26, 0.95);
   border: 1px solid var(--line-med);
   border-top: 2px solid var(--acid);
   padding: 24px 28px 24px 28px;
-  font-size: 11.5px;
-  line-height: 2;
+  font-size: 11px;
+  line-height: 1.8;
   color: var(--fog);
-  width: 330px;
+  width: 300px;
   z-index: 2;
   box-shadow: 0 48px 96px rgba(0, 0, 0, 0.7);
   opacity: 0;
@@ -340,11 +346,11 @@ nav.stuck {
 @keyframes codeIn {
   from {
     opacity: 0;
-    transform: translateY(-52%) translateX(24px);
+    transform: translateY(-50%) translateX(24px);
   }
   to {
     opacity: 1;
-    transform: translateY(-52%) translateX(0);
+    transform: translateY(-50%) translateX(0);
   }
 }
 
@@ -1550,16 +1556,30 @@ footer .container {
 }
 @media (max-width: 680px) {
   nav {
-    padding: 0 24px;
+    padding: 0;
   }
   .nav-links {
     display: none;
   }
   .sec {
-    padding: 80px 24px;
+    padding: 80px 0;
   }
   #hero {
-    padding: 0 24px 80px;
+    padding: 120px 0 60px;
+    min-height: auto;
+  }
+  #hero .container {
+    min-height: auto;
+    justify-content: flex-start;
+  }
+  .hero-h1 {
+    font-size: clamp(42px, 10vw, 56px);
+    margin-top: 20px;
+  }
+  .hero-available {
+    margin-bottom: 24px;
+    font-size: 9px;
+    padding: 6px 14px;
   }
   .hero-bottom {
     flex-direction: column;
@@ -1573,8 +1593,16 @@ footer .container {
     margin-top: 48px;
   }
   .hero-stats {
-    flex-wrap: wrap;
-    gap: 24px;
+    flex-wrap: nowrap;
+    gap: 16px;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .hstat-n {
+    font-size: 24px;
+  }
+  .hstat-l {
+    font-size: 7px;
   }
   .scroll-line {
     display: none;
@@ -1590,9 +1618,17 @@ footer .container {
     grid-template-columns: 1fr;
   }
   footer {
+    padding: 48px 0;
+  }
+  footer .container {
     flex-direction: column;
-    gap: 18px;
+    gap: 24px;
     text-align: center;
+  }
+  .f-links {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
   }
   .form-row {
     grid-template-columns: 1fr;

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
 const Contact: React.FC = () => {
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
-    "idle"
-  );
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
 
   const GOOGLE_FORM_ACTION =
     "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfxA_3RsAKDg_q-B97-HNtCsFwMyvYAyJLJgyqxMyKRXV11cw/formResponse";
@@ -33,9 +33,6 @@ const Contact: React.FC = () => {
       setStatus("success");
     } catch (err) {
       console.error("Submission error:", err);
-      // Even if it fails due to CORS, no-cors usually sends the data successfully.
-      // We'll set success because we can't reliably detect success/failure with no-cors,
-      // but status 0 is typical for successful no-cors POST.
       setStatus("success");
     }
   };
@@ -69,10 +66,15 @@ const Contact: React.FC = () => {
                 <span className="ci-i">☎</span>+234 806 026 4444
               </a>
               <div className="ci">
-                <span className="ci-i">◎</span>Dawaki, Abuja, Nigeria
+                <span className="ci-i">◎</span>Abuja, Nigeria
               </div>
-              <a href="#" className="ci">
-                <span className="ci-i">⬡</span>Available on Fiverr & Upwork
+              <a
+                href="https://www.upwork.com/freelancers/~01a5d9a440962d6d60"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ci"
+              >
+                <span className="ci-i">⬡</span>Available on Upwork & X
               </a>
             </div>
           </div>
