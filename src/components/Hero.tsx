@@ -73,7 +73,7 @@ const Hero = ({ scrollTo }: HeroProps) => {
           <div className="hero-stats">
             <div className="stat-item">
               <span className="stat-number" style={{ color: "var(--cyan)" }}>
-                3+
+                2+
               </span>
               <span className="stat-label">Years Editing</span>
             </div>
