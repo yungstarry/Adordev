@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 const Work = () => {
   const [videoUrl, setVideoUrl] = useState("");
@@ -172,7 +172,7 @@ const Work = () => {
             )}
 
             {isLoaded && mediaType === "video" && (
-              <video src={embedSrc} controls autoplay></video>
+              <video src={embedSrc} controls autoPlay></video>
             )}
 
             <div className="player-watermark">✦ Edited by Adordev</div>
