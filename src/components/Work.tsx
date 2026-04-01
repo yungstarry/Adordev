@@ -114,7 +114,7 @@ const Work = () => {
       <div className="container">
         <div className="work-header">
           <p className="label reveal" style={{ marginBottom: "1rem" }}>
-            ★ The Star Feature
+            ★ Browse my work
           </p>
           <h2 className="work-title reveal">
             Watch My Editing Style Come Alive

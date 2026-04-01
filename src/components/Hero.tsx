@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import myImage from "../assets/myImage.jpeg";
 
 interface HeroProps {
@@ -5,12 +6,47 @@ interface HeroProps {
 }
 
 const Hero = ({ scrollTo }: HeroProps) => {
+  const [dateTime, setDateTime] = useState("");
+
+  useEffect(() => {
+    const updateDateTime = () => {
+      const now = new Date();
+      // Format: Apr 02, 2026 · 12:00:00 PM
+      const formatted = now.toLocaleString('en-US', {
+        month: 'short',
+        day: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      }).replace(',', '');
+      setDateTime(formatted);
+    };
+
+    updateDateTime();
+    const interval = setInterval(updateDateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section id="hero">
       <div className="hero-left">
         <div className="hero-eyebrow">
           <div className="eyebrow-dot"></div>
-          <span className="label">Abuja, Nigeria · Available Worldwide</span>
+          <span className="label">
+            Abuja, Nigeria · Available Worldwide 
+            <span style={{ 
+              opacity: 0.4, 
+              marginLeft: "1rem", 
+              fontSize: "9px", 
+              letterSpacing: "0.05em",
+              fontFamily: "var(--mono)"
+              
+            }}>
+              {dateTime}
+            </span>
+          </span>
         </div>
 
         <h1 className="hero-name">
@@ -73,7 +109,7 @@ const Hero = ({ scrollTo }: HeroProps) => {
           <div className="hero-stats">
             <div className="stat-item">
               <span className="stat-number" style={{ color: "var(--cyan)" }}>
-                2+
+                3+
               </span>
               <span className="stat-label">Years Editing</span>
             </div>

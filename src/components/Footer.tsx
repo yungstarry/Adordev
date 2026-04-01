@@ -1,4 +1,6 @@
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer>
       <div className="container">
@@ -8,7 +10,7 @@ const Footer = () => {
               Ador<span>dev</span>
             </div>
             <p className="footer-copy" style={{ marginTop: ".4rem" }}>
-              © 2026 Adordev - Crafting Stories That Convert
+              © {currentYear} Adordev - Crafting Stories That Convert
             </p>
           </div>
           <div className="footer-links">
