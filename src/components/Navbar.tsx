@@ -1,11 +1,18 @@
 import { useState, useEffect } from "react";
 
 interface NavbarProps {
-  onOpenMenu: () => void;
+  isMenuOpen: boolean;
+  onToggleMenu: () => void;
+  onCloseMenu: () => void;
   scrollTo: (selector: string) => void;
 }
 
-const Navbar = ({ onOpenMenu, scrollTo }: NavbarProps) => {
+const Navbar = ({
+  isMenuOpen,
+  onToggleMenu,
+  onCloseMenu,
+  scrollTo,
+}: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -23,7 +30,15 @@ const Navbar = ({ onOpenMenu, scrollTo }: NavbarProps) => {
       role="navigation"
       aria-label="Main navigation"
     >
-      <a href="#" className="nav-logo">
+      <a
+        href="#"
+        className="nav-logo"
+        onClick={(e) => {
+          e.preventDefault();
+          onCloseMenu();
+          scrollTo("#hero");
+        }}
+      >
         Ador<span>dev</span>
       </a>
       <ul className="nav-links">
@@ -32,6 +47,7 @@ const Navbar = ({ onOpenMenu, scrollTo }: NavbarProps) => {
             href="#about"
             onClick={(e) => {
               e.preventDefault();
+              onCloseMenu();
               scrollTo("#about");
             }}
           >
@@ -43,6 +59,7 @@ const Navbar = ({ onOpenMenu, scrollTo }: NavbarProps) => {
             href="#expertise"
             onClick={(e) => {
               e.preventDefault();
+              onCloseMenu();
               scrollTo("#expertise");
             }}
           >
@@ -54,6 +71,7 @@ const Navbar = ({ onOpenMenu, scrollTo }: NavbarProps) => {
             href="#tools"
             onClick={(e) => {
               e.preventDefault();
+              onCloseMenu();
               scrollTo("#tools");
             }}
           >
@@ -65,6 +83,7 @@ const Navbar = ({ onOpenMenu, scrollTo }: NavbarProps) => {
             href="#work"
             onClick={(e) => {
               e.preventDefault();
+              onCloseMenu();
               scrollTo("#work");
             }}
           >
@@ -76,6 +95,7 @@ const Navbar = ({ onOpenMenu, scrollTo }: NavbarProps) => {
             href="#contact"
             onClick={(e) => {
               e.preventDefault();
+              onCloseMenu();
               scrollTo("#contact");
             }}
           >
@@ -102,15 +122,21 @@ const Navbar = ({ onOpenMenu, scrollTo }: NavbarProps) => {
         >
           <i className="fa-brands fa-linkedin"></i>
         </a>
-        <button className="btn-primary" onClick={() => scrollTo("#contact")}>
+        <button
+          className="btn-primary"
+          onClick={() => {
+            onCloseMenu();
+            scrollTo("#contact");
+          }}
+        >
           Book a Call
         </button>
         <button
           className="hamburger"
-          onClick={onOpenMenu}
-          aria-label="Open menu"
+          onClick={onToggleMenu}
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
         >
-          <i className="fa-solid fa-bars"></i>
+          <i className={`fa-solid ${isMenuOpen ? "fa-xmark" : "fa-bars"}`}></i>
         </button>
       </div>
     </nav>

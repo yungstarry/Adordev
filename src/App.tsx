@@ -57,7 +57,12 @@ function App() {
         scrollTo={scrollTo}
       />
 
-      <Navbar onOpenMenu={() => setIsMenuOpen(true)} scrollTo={scrollTo} />
+      <Navbar
+        isMenuOpen={isMenuOpen}
+        onToggleMenu={() => setIsMenuOpen(!isMenuOpen)}
+        onCloseMenu={() => setIsMenuOpen(false)}
+        scrollTo={scrollTo}
+      />
 
       <main>
         <Hero scrollTo={scrollTo} />
