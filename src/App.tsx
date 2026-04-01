@@ -1,47 +1,79 @@
-import React, { useEffect } from 'react';
-import Cursor from './components/Cursor';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Ticker from './components/Ticker';
-import About from './components/About';
-import Projects from './components/Projects';
-import Services from './components/Services';
-import Process from './components/Process';
-import Stack from './components/Stack';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
+import { useState, useEffect } from "react";
+import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
+import Marquee from "./components/Marquee";
+import About from "./components/About";
+import Expertise from "./components/Expertise";
+import Different from "./components/Different";
+import Tools from "./components/Tools";
+import Work from "./components/Work";
+import Services from "./components/Services";
+import Contact from "./components/Contact";
+import Footer from "./components/Footer";
+import MobileMenu from "./components/MobileMenu";
+import CustomCursor from "./components/CustomCursor";
 
-const App: React.FC = () => {
+function App() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.08 });
+    // Intersection Observer for reveal animations
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 },
+    );
 
-    document.querySelectorAll('.r').forEach(el => observer.observe(el));
+    const revealElements = document.querySelectorAll(
+      ".reveal, .timeline-item, .expertise-card, .service-card",
+    );
+    revealElements.forEach((el) => io.observe(el));
 
-    return () => observer.disconnect();
+    return () => {
+      revealElements.forEach((el) => io.unobserve(el));
+    };
   }, []);
 
+  const scrollTo = (selector: string) => {
+    const element = document.querySelector(selector);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
-    <div className="app">
-      <Cursor />
-      <Navbar />
-      <Hero />
-      <Ticker />
-      <About />
-      <Projects />
-      <Services />
-      <Process />
-      <Stack />
-      <Contact />
+    <>
+      <CustomCursor />
+
+      <MobileMenu
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        scrollTo={scrollTo}
+      />
+
+      <Navbar onOpenMenu={() => setIsMenuOpen(true)} scrollTo={scrollTo} />
+
+      <main>
+        <Hero scrollTo={scrollTo} />
+        <Marquee />
+        <About />
+        <Expertise />
+        <Different />
+        <Tools />
+        <Work />
+        <Services />
+        <Contact />
+      </main>
+
       <Footer />
-    </div>
+    </>
   );
-};
+}
 
 export default App;

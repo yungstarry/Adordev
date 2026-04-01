@@ -1,130 +1,97 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-const Contact: React.FC = () => {
-  const [status, setStatus] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
+const Contact = () => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const GOOGLE_FORM_ACTION =
-    "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfxA_3RsAKDg_q-B97-HNtCsFwMyvYAyJLJgyqxMyKRXV11cw/formResponse";
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus("loading");
-
-    const formData = new FormData(e.currentTarget);
-    const data = new URLSearchParams();
-
-    // Mapping entry IDs
-    data.append("entry.1958643761", formData.get("name") as string);
-    data.append("entry.1482874536", formData.get("email") as string);
-    data.append("entry.965701753", formData.get("subject") as string);
-    data.append("entry.204044611", formData.get("desc") as string);
-
-    try {
-      await fetch(GOOGLE_FORM_ACTION, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: data.toString(),
-      });
-      setStatus("success");
-    } catch (err) {
-      console.error("Submission error:", err);
-      setStatus("success");
-    }
+    setIsSubmitted(true);
+    console.log(
+      "%c✅ Adordev: Message received!",
+      "color:#00e8ff;font-weight:bold",
+    );
   };
 
   return (
-    <section id="contact" className="sec">
+    <section id="contact">
       <div className="container">
-        <div className="eyebrow r">
-          <span>Contact</span>
-          <span className="eyebrow-n">06</span>
-        </div>
-        <div className="contact-g">
-          <div>
-            <h2 className="contact-h r">
-              Let's build
-              <br />
-              <em>something</em>
-              <br />
-              great
+        <div className="contact-wrapper">
+          <div className="contact-left">
+            <div className="section-label reveal">
+              <span className="label">Get In Touch</span>
+            </div>
+            <h2 className="reveal">
+              Ready to Create Something People Won't Scroll Past?
             </h2>
-            <p className="contact-sub r">
-              Got a product to build, a mobile app to ship, or a backend that
-              needs rescuing? Available for freelance, contract, and full-time
-              engagements. Let's talk.
-            </p>
-            <div className="contact-items r d1">
-              {/* <a href="mailto:hello@adordev.com" className="ci">
-                <span className="ci-i">✉</span>hello@adordev.com
-              </a> */}
-              <a href="tel:+2348060264444" className="ci">
-                <span className="ci-i">☎</span>+234 806 026 4444
-              </a>
-              <div className="ci">
-                <span className="ci-i">◎</span>Abuja, Nigeria
+
+            <div className="contact-info reveal">
+              <div className="contact-row">
+                <i className="fa-solid fa-envelope"></i>
+                <a href="mailto:hello@adordev.com">hello@adordev.com</a>
               </div>
-              <a href="https://www.upwork.com/freelancers/~01a5d9a440962d6d60" target="_blank" rel="noopener noreferrer" className="ci">
-                <span className="ci-i">⬡</span>Available on Upwork & X
-              </a>
+              <div className="contact-row">
+                <i className="fa-brands fa-x-twitter"></i>
+                <a href="https://x.com/Adordev_" target="_blank" rel="noopener">
+                  @Adordev_
+                </a>
+              </div>
+              <div className="contact-row">
+                <i className="fa-solid fa-location-dot"></i>
+                <span>Abuja, Nigeria · Global Delivery</span>
+              </div>
+            </div>
+
+            <div className="contact-tags reveal">
+              <span className="contact-tag">⚡ Fast Turnaround</span>
+              <span className="contact-tag">🌍 Global Delivery</span>
+              <span className="contact-tag">✅ 100% Satisfaction</span>
             </div>
           </div>
 
-          <div className="form r d1">
-            {status === "success" ? (
-              <div className="form-success">
-                <div className="fs-icon">✓</div>
-                <h3 className="fs-h">Message Sent!</h3>
-                <p className="fs-p">
-                  Thanks for reaching out. I'll get back to you within 24 hours.
-                </p>
-                <button className="fs-btn" onClick={() => setStatus("idle")}>
-                  Send another message
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit}>
-                <div className="form-row">
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Your name"
-                    required
-                    disabled={status === "loading"}
-                  />
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Email address"
-                    required
-                    disabled={status === "loading"}
-                  />
-                </div>
+          <div>
+            {!isSubmitted ? (
+              <form
+                className="contact-form"
+                onSubmit={handleSubmit}
+                id="contactForm"
+              >
                 <input
                   type="text"
-                  name="subject"
-                  placeholder="Subject / Project type"
+                  className="form-field"
+                  placeholder="Your name"
                   required
-                  disabled={status === "loading"}
+                  aria-label="Your name"
+                />
+                <input
+                  type="email"
+                  className="form-field"
+                  placeholder="Your email"
+                  required
+                  aria-label="Your email"
                 />
                 <textarea
-                  name="desc"
-                  placeholder="Tell me about your project — what are you building, what's the timeline, what do you need?"
+                  className="form-field"
+                  placeholder="Tell me about your project - what do you want people to feel?"
+                  rows={5}
                   required
-                  disabled={status === "loading"}
+                  aria-label="Your message"
                 ></textarea>
-                <button
-                  type="submit"
-                  className="form-submit"
-                  disabled={status === "loading"}
-                >
-                  {status === "loading" ? "Sending..." : "Send Message →"}
+                <button type="submit" className="form-submit">
+                  <i className="fa-solid fa-paper-plane"></i> Send Message
                 </button>
               </form>
+            ) : (
+              <div
+                className="success-msg"
+                id="successMsg"
+                style={{ display: "block" }}
+              >
+                <i
+                  className="fa-solid fa-circle-check"
+                  style={{ color: "var(--cyan)", marginRight: ".5rem" }}
+                ></i>
+                Message sent! I'll be in touch within 24 hours.
+              </div>
             )}
           </div>
         </div>

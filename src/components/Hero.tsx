@@ -1,106 +1,101 @@
-import React from "react";
+import myImage from "../assets/myImage.jpeg";
 
-const Hero: React.FC = () => {
+interface HeroProps {
+  scrollTo: (selector: string) => void;
+}
+
+const Hero = ({ scrollTo }: HeroProps) => {
   return (
     <section id="hero">
-      <div className="hero-glow"></div>
-      <div className="hero-grid"></div>
-
-      <div className="container">
-        <div className="hero-code">
-          <div className="hero-code-head">
-            <div className="dot dot-r"></div>
-            <div className="dot dot-y"></div>
-            <div className="dot dot-g"></div>
-            <div className="hero-code-file">auth.controller.ts</div>
-          </div>
-          <span className="cm">
-            // Adordev — clean, typed, production-ready
-          </span>
-          <br />
-          <span className="kw">import</span> {"{"}{" "}
-          <span className="tp">Controller</span>,{" "}
-          <span className="tp">Post</span>, <span className="tp">Body</span>{" "}
-          {"}"}
-          <br />
-          &nbsp;&nbsp;<span className="kw">from</span>{" "}
-          <span className="str">'@nestjs/common'</span>;<br />
-          <br />@<span className="fn">Controller</span>(
-          <span className="str">'auth'</span>)<br />
-          <span className="kw">export class</span>{" "}
-          <span className="fn">AuthController</span> {"{"}
-          <br />
-          &nbsp;&nbsp;<span className="kw">constructor</span>(
-          <span className="kw">private</span>{" "}
-          <span className="tp">authSvc</span>:{" "}
-          <span className="tp">AuthService</span>) {"{}"}
-          <br />
-          <br />
-          &nbsp;&nbsp;@<span className="fn">Post</span>(
-          <span className="str">'login'</span>)<br />
-          &nbsp;&nbsp;<span className="kw">async</span>{" "}
-          <span className="fn">login</span>(@<span className="fn">Body</span>(){" "}
-          <span className="tp">dto</span>: <span className="tp">LoginDto</span>){" "}
-          {"{"}
-          <br />
-          &nbsp;&nbsp;&nbsp;&nbsp;<span className="kw">return</span>{" "}
-          <span className="kw">this</span>.<span className="tp">authSvc</span>.
-          <span className="fn">issueToken</span>(<span className="tp">dto</span>
-          );
-          <br />
-          &nbsp;&nbsp;{"}"}
-          <br />
-          {"}"}
+      <div className="hero-left">
+        <div className="hero-eyebrow">
+          <div className="eyebrow-dot"></div>
+          <span className="label">Abuja, Nigeria · Available Worldwide</span>
         </div>
 
-        <div className="hero-available">
-          <div className="avail-pulse"></div>Available for new projects
-        </div>
-
-        <h1 className="hero-h1">
-          Software
-          <br />
-          <span className="is">Engineer</span>
+        <h1 className="hero-name">
+          Ador<span className="accent">dev</span>
         </h1>
 
-        <div className="hero-bottom">
-          <p className="hero-desc">
-            I'm Adordev — a software engineer based in Abuja, Nigeria. I build
-            high-performance backend systems with modern tech stacks and
-            cross-platform mobile apps that users love. From REST APIs to
-            production-ready mobile apps, I ship things that work.
+        <p className="hero-sub">
+          I don't just edit videos -<br />I craft stories people&nbsp;remember.
+        </p>
+
+        <div className="hero-bio body-text reveal">
+          <p>
+            I help creators, brands, and businesses turn raw footage into
+            cinematic, emotionally engaging content that keeps viewers watching
+            and drives real results. With a unique background in{" "}
+            <strong style={{ color: "var(--white)" }}>
+              data analysis and web development
+            </strong>
+            , I approach video editing differently - not just for aesthetics,
+            but for performance, retention, and impact.
           </p>
-          <div className="hero-actions">
-            <a href="#projects" className="btn-solid">
-              View Work
-            </a>
-            <a href="#contact" className="btn-outline">
-              Get In Touch
-            </a>
-          </div>
+          <ul className="think-list">
+            <li>What should the viewer feel?</li>
+            <li>Where should they stay hooked?</li>
+            <li>What makes this video convert?</li>
+          </ul>
+          <p style={{ marginTop: ".8rem" }}>
+            Then I execute - clean, sharp, and intentional.
+          </p>
         </div>
 
-        <div className="hero-bottom-row">
-          <div className="scroll-line">
-            <div className="sl-bar"></div>
-            Scroll to explore
-          </div>
+        <div className="hero-ctas reveal">
+          <button
+            className="btn-cta-primary"
+            onClick={() => scrollTo("#work")}
+            aria-label="See my work live"
+          >
+            <i className="fa-solid fa-play"></i> See My Work Live
+          </button>
+          <button
+            className="btn-cta-outline"
+            onClick={() => scrollTo("#contact")}
+            aria-label="Get in touch"
+          >
+            Let's Build Something Powerful
+          </button>
+        </div>
+      </div>
 
+      <div className="hero-right" aria-hidden="true">
+        <img
+          src={myImage}
+          alt="Adordev - Cinematic Video Editor"
+          className="hero-image"
+          loading="eager"
+        />
+        <div className="hero-image-overlay"></div>
+        <div className="hero-frame-badge reveal">
+          <span className="label">Editor & Story Architect</span>
           <div className="hero-stats">
-            <div>
-              <div className="hstat-n">15+</div>
-              <div className="hstat-l">Projects Shipped</div>
+            <div className="stat-item">
+              <span className="stat-number" style={{ color: "var(--cyan)" }}>
+                3+
+              </span>
+              <span className="stat-label">Years Editing</span>
             </div>
-            <div>
-              <div className="hstat-n">5+</div>
-              <div className="hstat-l">Years Coding</div>
+            <div className="stat-item">
+              <span className="stat-number">100%</span>
+              <span className="stat-label">Satisfaction</span>
             </div>
-            <div>
-              <div className="hstat-n">100%</div>
-              <div className="hstat-l">Client Satisfaction</div>
+            <div className="stat-item">
+              <span className="stat-number" style={{ color: "var(--red)" }}>
+                ∞
+              </span>
+              <span className="stat-label">Story First</span>
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="scroll-indicator" aria-hidden="true">
+        <div className="scroll-line"></div>
+        <span className="label" style={{ fontSize: "10px" }}>
+          scroll
+        </span>
       </div>
     </section>
   );

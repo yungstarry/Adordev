@@ -1,18 +1,28 @@
-import React from "react";
-
-const Footer: React.FC = () => {
+const Footer = () => {
   return (
     <footer>
       <div className="container">
-        <div className="f-logo">
-          Ador<em>dev</em>
-        </div>
-        <div className="f-copy">© 2026 Adordev · All rights reserved</div>
-        <div className="f-links">
-          <a href="https://x.com/adordev_" target="_blank" rel="noopener noreferrer">X</a>
-          <a href="https://www.upwork.com/freelancers/~01a5d9a440962d6d60" target="_blank" rel="noopener noreferrer">Upwork</a>
-          <a href="https://github.com/yungstarry" target="_blank" rel="noopener noreferrer">GitHub</a>
-          <a href="https://www.linkedin.com/in/azeezisrael/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <div className="footer-inner">
+          <div>
+            <div className="footer-brand">
+              Ador<span>dev</span>
+            </div>
+            <p className="footer-copy" style={{ marginTop: ".4rem" }}>
+              © 2026 Adordev - Crafting Stories That Convert
+            </p>
+          </div>
+          <div className="footer-links">
+            <a href="#about">Story</a>
+            <a href="#expertise">Expertise</a>
+            <a href="#work">Work</a>
+            <a href="#contact">Contact</a>
+            <a href="https://x.com/Adordev_" target="_blank" rel="noopener">
+              <i className="fa-brands fa-x-twitter"></i>
+            </a>
+          </div>
+          <p className="footer-tagline">
+            Built as a living portfolio that proves my editing philosophy.
+          </p>
         </div>
       </div>
     </footer>

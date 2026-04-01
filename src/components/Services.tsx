@@ -1,60 +1,30 @@
-import React from "react";
-
-const Services: React.FC = () => {
+const Services = () => {
   return (
-    <section id="services" className="sec sec-alt">
+    <section id="services">
       <div className="container">
-        <div className="eyebrow r">
-          <span>Services</span>
-          <span className="eyebrow-n">03</span>
+        <div className="section-label reveal">
+          <span className="label">Let's Work Together</span>
         </div>
-        <div className="svc-layout">
-          <div>
-            <h2 className="svc-intro-h r">
-              What I<br />
-              <em>build</em>
-            </h2>
-            <p className="svc-intro-p r d1">
-              I take products from idea to production — backend systems, mobile
-              apps, APIs, and infrastructure. Every service below is something I
-              deliver end-to-end.
-            </p>
+        <h2 className="section-title reveal" style={{ maxWidth: '500px' }}>Choose your cinematic journey.</h2>
+
+        <div className="services-grid">
+          <div className="service-card reveal">
+            <div className="service-number">01 / LONG-FORM</div>
+            <h3>YouTube Content</h3>
+            <p>Talking-head, storytelling, and documentary-style videos designed for maximum watch time, subscriber loyalty, and genuine connection.</p>
+            <span className="service-tag">→ Retention First</span>
           </div>
-          <div className="svc-list">
-            {[
-              {
-                icon: "⬡",
-                t: "Backend Development",
-                p: "High-performance backend systems built with modern stacks — Node.js, NestJS, and TypeScript. Microservices, monoliths, background processing, event-driven architectures — built clean, tested, and ready for scale.",
-                d: "",
-              },
-              {
-                icon: "◱",
-                t: "Mobile App Development",
-                p: "Cross-platform mobile apps for iOS and Android using React Native and Flutter. From concept to App Store — smooth UX, offline support, push notifications, and deep backend integration.",
-                d: "d1",
-              },
-              {
-                icon: "⟳",
-                t: "API Design & Development",
-                p: "REST and GraphQL APIs engineered for developer experience — versioning, OAuth 2.0 auth, rate limiting, webhook systems, and thorough documentation. Clean contracts, zero ambiguity.",
-                d: "d2",
-              },
-              {
-                icon: "◎",
-                t: "Database & Infrastructure",
-                p: "Schema design, query optimisation, and cloud deployment across PostgreSQL, MongoDB, and Redis on AWS or any cloud provider. Systems that stay fast and maintainable as you grow.",
-                d: "d3",
-              },
-            ].map((s, i) => (
-              <div className={`svc-item r ${s.d}`} key={i}>
-                <div className="svc-icon">{s.icon}</div>
-                <div>
-                  <div className="svc-t">{s.t}</div>
-                  <p className="svc-p">{s.p}</p>
-                </div>
-              </div>
-            ))}
+          <div className="service-card reveal" style={{ transitionDelay: '.12s' }}>
+            <div className="service-number">02 / SHORT-FORM</div>
+            <h3>Viral Short-Form Videos</h3>
+            <p>Reels, Shorts, and TikToks engineered to stop the scroll, trigger shares, and grow your audience faster than anything else.</p>
+            <span className="service-tag">→ Algorithm Ready</span>
+          </div>
+          <div className="service-card reveal" style={{ transitionDelay: '.24s' }}>
+            <div className="service-number">03 / BRAND</div>
+            <h3>Cinematic Brand Storytelling</h3>
+            <p>Premium mood-driven edits that make your brand feel like a blockbuster. Emotionally resonant. Strategically built. Unforgettable.</p>
+            <span className="service-tag">→ Premium Impact</span>
           </div>
         </div>
       </div>
