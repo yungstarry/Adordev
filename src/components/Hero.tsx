@@ -18,7 +18,7 @@ const Hero = ({ scrollTo }: HeroProps) => {
         </h1>
 
         <p className="hero-sub">
-          I don't just edit videos -<br />I craft stories people&nbsp;remember.
+          I don't just edit videos - I craft stories people&nbsp;remember.
         </p>
 
         <div className="hero-bio body-text reveal">

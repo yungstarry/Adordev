@@ -27,17 +27,53 @@ const Contact = () => {
             <div className="contact-info reveal">
               <div className="contact-row">
                 <i className="fa-solid fa-envelope"></i>
-                <a href="mailto:hello@adordev.com">hello@adordev.com</a>
-              </div>
-              <div className="contact-row">
-                <i className="fa-brands fa-x-twitter"></i>
-                <a href="https://x.com/Adordev_" target="_blank" rel="noopener">
-                  @Adordev_
+                <a href="mailto:azeezisrael44@gmail.com">
+                  azeezisrael44@gmail.com
                 </a>
               </div>
               <div className="contact-row">
-                <i className="fa-solid fa-location-dot"></i>
-                <span>Abuja, Nigeria · Global Delivery</span>
+                <i className="fa-solid fa-phone"></i>
+                <a href="tel:+2348060264444">+234 806 026 4444</a>
+              </div>
+              <div className="contact-row">
+                <i className="fa-brands fa-linkedin"></i>
+                <a
+                  href="https://www.linkedin.com/in/azeezisrael/"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  LinkedIn
+                </a>
+              </div>
+              <div className="contact-row">
+                <i className="fa-brands fa-github"></i>
+                <a
+                  href="https://github.com/yungstarry"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  GitHub
+                </a>
+              </div>
+              <div className="contact-row">
+                <i className="fa-brands fa-instagram"></i>
+                <a
+                  href="https://www.instagram.com/adordev/"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Instagram
+                </a>
+              </div>
+              <div className="contact-row">
+                <i className="fa-solid fa-globe"></i>
+                <a
+                  href="https://azeezisrael.vercel.app/contact"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Portfolio
+                </a>
               </div>
             </div>
 

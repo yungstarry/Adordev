@@ -1,11 +1,50 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
+import { videos } from "../data/videos";
+import type { Video } from "../data/videos";
 
 const Work = () => {
-  const [videoUrl, setVideoUrl] = useState("");
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [mediaType, setMediaType] = useState<"iframe" | "video" | null>(null);
-  const [embedSrc, setEmbedSrc] = useState("");
+  const [selectedVideo, setSelectedVideo] = useState<Video>(videos[0]);
+  const [isLoaded, setIsLoaded] = useState(true);
+  const [mediaType, setMediaType] = useState<"iframe" | "video" | null>(
+    "iframe",
+  );
+  const [embedSrc, setEmbedSrc] = useState(
+    `https://player.vimeo.com/video/76979871?autoplay=1&title=0&byline=0`,
+  );
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Dropdown States
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Filters
+  const [styleFilter, setStyleFilter] = useState<string>("All");
+  const [typeFilter, setTypeFilter] = useState<string>("All");
+  const [tagFilter, setTagFilter] = useState<string>("All");
+
+  const styles = useMemo(() => ["All", ...Array.from(new Set(videos.map(v => v.style)))], []);
+  const types = useMemo(() => ["All", ...Array.from(new Set(videos.map(v => v.type)))], []);
+  const tags = ["All", "Editor's Favorite", "Most Viewed", "Favorite"];
+
+  const filteredVideos = useMemo(() => {
+    return videos.filter(v => {
+      const matchStyle = styleFilter === "All" || v.style === styleFilter;
+      const matchType = typeFilter === "All" || v.type === typeFilter;
+      const matchTag = tagFilter === "All" || v.tags.includes(tagFilter);
+      return matchStyle && matchType && matchTag;
+    });
+  }, [styleFilter, typeFilter, tagFilter]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const renderVideo = (url: string) => {
     setIsLoading(true);
@@ -34,22 +73,14 @@ const Work = () => {
     setTimeout(() => setIsLoading(false), 1500);
   };
 
-  const handleLoadVideo = () => {
-    if (!videoUrl.trim()) return;
-    renderVideo(videoUrl.trim());
+  const handleVideoSelect = (video: Video) => {
+    setSelectedVideo(video);
+    renderVideo(video.url);
+    setActiveDropdown(null);
   };
 
-  const loadExample = (url: string) => {
-    setVideoUrl(url);
-    renderVideo(url);
-    document.getElementById("work")?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const resetPlayer = () => {
-    setIsLoaded(false);
-    setVideoUrl("");
-    setMediaType(null);
-    setEmbedSrc("");
+  const toggleDropdown = (name: string) => {
+    setActiveDropdown(activeDropdown === name ? null : name);
   };
 
   return (
@@ -60,102 +91,112 @@ const Work = () => {
             ★ The Star Feature
           </p>
           <h2 className="work-title reveal">
-            Paste Any Video Link &amp;
-            <br />
-            <em>Watch My Editing Style Come Alive</em>
+            Watch My Editing Style Come Alive
           </h2>
           <p className="work-subtitle reveal">
-            YouTube · Vimeo · TikTok · Direct MP4 - my work plays instantly in
-            this session. Clients use this to preview how their raw footage
-            transforms.
+            Select a project below to experience how I transform raw footage into cinematic stories. 
           </p>
         </div>
 
-        <div className="video-console reveal">
+        <div className="video-console reveal" ref={containerRef}>
           <div className="console-topbar">
-            <div
-              className="console-dot"
-              style={{ background: "#e63939" }}
-            ></div>
-            <div
-              className="console-dot"
-              style={{ background: "#c8a96e" }}
-            ></div>
-            <div
-              className="console-dot"
-              style={{ background: "#00e8ff" }}
-            ></div>
-            <span className="console-title">
-              adordev - video preview studio
-            </span>
+            <div className="console-dot" style={{ background: "#e63939" }}></div>
+            <div className="console-dot" style={{ background: "#c8a96e" }}></div>
+            <div className="console-dot" style={{ background: "#00e8ff" }}></div>
+            <span className="console-title">adordev - video preview studio</span>
           </div>
 
-          <div className="url-bar-row">
-            <input
-              type="url"
-              className="url-input"
-              placeholder="Paste YouTube, Vimeo, or direct .mp4 link here..."
-              aria-label="Video URL input"
-              value={videoUrl}
-              onChange={(e) => setVideoUrl(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleLoadVideo()}
-            />
-            <button
-              className="load-btn"
-              onClick={handleLoadVideo}
-              aria-label="Load and play video"
-            >
-              <i className="fa-solid fa-play"></i> Load &amp; Play
-            </button>
-          </div>
-
-          <div className="chips-row">
-            <span
-              className="label"
-              style={{ alignSelf: "center", marginRight: ".3rem" }}
-            >
-              Try:
-            </span>
-            <button
-              className="chip"
-              onClick={() =>
-                loadExample("https://www.youtube.com/watch?v=3JZ4pnN7gm8")
-              }
-            >
-              <span className="chip-icon">▶</span>YouTube Storytelling Edit
-            </button>
-            <button
-              className="chip"
-              onClick={() =>
-                loadExample("https://www.youtube.com/watch?v=dQw4w9wgxcQ")
-              }
-            >
-              <span className="chip-icon">▶</span>Short-Form Reel
-            </button>
-            <button
-              className="chip"
-              onClick={() => loadExample("https://vimeo.com/76979871")}
-            >
-              <span className="chip-icon">▶</span>Cinematic Brand Story
-            </button>
-          </div>
-
-          <div
-            className={`player-area ${isLoaded ? "loaded" : ""}`}
-            id="playerArea"
-          >
-            {!isLoaded && (
-              <div className="player-placeholder" id="playerPlaceholder">
-                <div className="player-placeholder-icon">
-                  <i className="fa-solid fa-film"></i>
+          <div className="selection-pane">
+            <div className="filter-dropdown-grid">
+              {/* Style Filter */}
+              <div className="custom-dropdown">
+                <span className="filter-label">Style</span>
+                <button className="dropdown-trigger" onClick={() => toggleDropdown('style')}>
+                  <span>{styleFilter}</span>
+                  <i className={`fa-solid fa-chevron-${activeDropdown === 'style' ? 'up' : 'down'}`}></i>
+                </button>
+                <div className={`dropdown-menu ${activeDropdown === 'style' ? 'show' : ''}`}>
+                  {styles.map(s => (
+                    <div 
+                      key={s} 
+                      className={`dropdown-item ${styleFilter === s ? 'active' : ''}`}
+                      onClick={() => { setStyleFilter(s); setActiveDropdown(null); }}
+                    >
+                      {s}
+                    </div>
+                  ))}
                 </div>
-                <p>Your cinematic preview awaits</p>
-                <span className="label" style={{ fontSize: "10px" }}>
-                  paste a link above or choose an example
-                </span>
               </div>
-            )}
 
+              {/* Type Filter */}
+              <div className="custom-dropdown">
+                <span className="filter-label">Type</span>
+                <button className="dropdown-trigger" onClick={() => toggleDropdown('type')}>
+                  <span>{typeFilter}</span>
+                  <i className={`fa-solid fa-chevron-${activeDropdown === 'type' ? 'up' : 'down'}`}></i>
+                </button>
+                <div className={`dropdown-menu ${activeDropdown === 'type' ? 'show' : ''}`}>
+                  {types.map(t => (
+                    <div 
+                      key={t} 
+                      className={`dropdown-item ${typeFilter === t ? 'active' : ''}`}
+                      onClick={() => { setTypeFilter(t); setActiveDropdown(null); }}
+                    >
+                      {t}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Curated Lists Filter */}
+              <div className="custom-dropdown">
+                <span className="filter-label">Curated</span>
+                <button className="dropdown-trigger" onClick={() => toggleDropdown('tag')}>
+                  <span>{tagFilter === "All" ? "All Projects" : tagFilter}</span>
+                  <i className={`fa-solid fa-chevron-${activeDropdown === 'tag' ? 'up' : 'down'}`}></i>
+                </button>
+                <div className={`dropdown-menu ${activeDropdown === 'tag' ? 'show' : ''}`}>
+                  {tags.map(tag => (
+                    <div 
+                      key={tag} 
+                      className={`dropdown-item ${tagFilter === tag ? 'active' : ''}`}
+                      onClick={() => { setTagFilter(tag); setActiveDropdown(null); }}
+                    >
+                      {tag === "All" ? "All Projects" : tag}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Video Selector */}
+            <div className="custom-dropdown" style={{ marginTop: '1rem' }}>
+              <span className="filter-label">Select Video to Watch</span>
+              <button className="dropdown-trigger" onClick={() => toggleDropdown('video')}>
+                <span>{selectedVideo.title}</span>
+                <i className={`fa-solid fa-chevron-${activeDropdown === 'video' ? 'up' : 'down'}`}></i>
+              </button>
+              <div className={`dropdown-menu ${activeDropdown === 'video' ? 'show' : ''}`}>
+                {filteredVideos.length > 0 ? (
+                  filteredVideos.map((video) => (
+                    <div 
+                      key={video.title} 
+                      className={`dropdown-item ${selectedVideo.title === video.title ? 'active' : ''}`}
+                      style={{ flexDirection: 'column', alignItems: 'flex-start' }}
+                      onClick={() => handleVideoSelect(video)}
+                    >
+                      <span className="video-option-title">{video.title}</span>
+                      <span className="video-option-meta">{video.style} • {video.type}</span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="dropdown-item" style={{ opacity: 0.5 }}>No projects match filters</div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className={`player-area ${isLoaded ? "loaded" : ""}`} id="playerArea">
             {isLoaded && isLoading && (
               <div className="player-loading">
                 <div className="spinner"></div>
@@ -177,14 +218,6 @@ const Work = () => {
 
             <div className="player-watermark">✦ Edited by Adordev</div>
           </div>
-
-          {isLoaded && (
-            <div className="reset-row" id="resetRow">
-              <button className="reset-btn" onClick={resetPlayer}>
-                <i className="fa-solid fa-rotate-left"></i> Reset Player
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </section>

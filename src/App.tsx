@@ -61,12 +61,12 @@ function App() {
 
       <main>
         <Hero scrollTo={scrollTo} />
+        <Work />
         <Marquee />
         <About />
         <Expertise />
         <Different />
         <Tools />
-        <Work />
         <Services />
         <Contact />
       </main>
