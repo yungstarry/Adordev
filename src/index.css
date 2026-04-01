@@ -1594,6 +1594,13 @@ footer {
   text-transform: uppercase;
 }
 
+.player-area.is-vertical {
+  aspect-ratio: 9/16;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* ── REVEAL ANIMATIONS ── */
 .reveal {
   opacity: 0;
@@ -1631,6 +1638,20 @@ footer {
   }
   .hamburger {
     display: block;
+  }
+  .nav-right {
+    gap: 0.5rem;
+  }
+  .nav-right .btn-ghost {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.7rem;
+  }
+  .nav-right .btn-primary {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.65rem;
+  }
+  nav {
+    padding: 0 1rem;
   }
 }
 @media (max-width: 600px) {
