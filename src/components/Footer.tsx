@@ -4,12 +4,8 @@ const Footer = () => {
       <div className="container">
         <div className="footer-inner">
           <div>
-            <div className="footer-brand">
-              Ador<span>dev</span>
-            </div>
-            <p className="footer-copy" style={{ marginTop: ".4rem" }}>
-              © 2026 Adordev - Crafting Stories That Convert
-            </p>
+            <div className="footer-brand">Ador<span>dev</span></div>
+            <p className="footer-copy" style={{ marginTop: '.4rem' }}>© 2026 Adordev - Crafting Stories That Convert</p>
           </div>
           <div className="footer-links">
             <a href="#about">Story</a>
@@ -20,9 +16,7 @@ const Footer = () => {
               <i className="fa-brands fa-x-twitter"></i>
             </a>
           </div>
-          <p className="footer-tagline">
-            Built as a living portfolio that proves my editing philosophy.
-          </p>
+          <p className="footer-tagline">Built as a living portfolio that proves my editing philosophy.</p>
         </div>
       </div>
     </footer>

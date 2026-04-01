@@ -29,8 +29,8 @@ const Hero = ({ scrollTo }: HeroProps) => {
             <strong style={{ color: "var(--white)" }}>
               data analysis and web development
             </strong>
-            , I approach video editing differently - not just for aesthetics,
-            but for performance, retention, and impact.
+            , I approach video editing differently - not just for aesthetics, but
+            for performance, retention, and impact.
           </p>
           <ul className="think-list">
             <li>What should the viewer feel?</li>
