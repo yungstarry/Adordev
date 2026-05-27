@@ -25,7 +25,7 @@ const Work = () => {
   const [tagFilter, setTagFilter] = useState<string>("All");
 
   const styles = useMemo(
-    () => ["All", ...Array.from(new Set(videos.map((v) => v.style)))],
+    () => ["All", ...Array.from(new Set(videos.flatMap((v) => v.style)))],
     [],
   );
   const types = useMemo(
@@ -36,7 +36,7 @@ const Work = () => {
 
   const filteredVideos = useMemo(() => {
     return videos.filter((v) => {
-      const matchStyle = styleFilter === "All" || v.style === styleFilter;
+      const matchStyle = styleFilter === "All" || v.style.includes(styleFilter);
       const matchType = typeFilter === "All" || v.type === typeFilter;
       const matchTag = tagFilter === "All" || v.tags.includes(tagFilter);
       return matchStyle && matchType && matchTag;
