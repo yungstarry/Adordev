@@ -8,9 +8,8 @@ const Work = () => {
   const [mediaType, setMediaType] = useState<"iframe" | "video" | null>(
     "iframe",
   );
-  const [embedSrc, setEmbedSrc] = useState(
-    `https://player.vimeo.com/video/76979871?autoplay=1&title=0&byline=0`,
-  );
+ 
+  const [embedSrc, setEmbedSrc] = useState(videos[0].url);
   const [isLoading, setIsLoading] = useState(false);
   const [isVertical, setIsVertical] = useState(false);
 
@@ -99,6 +98,11 @@ const Work = () => {
     setTimeout(() => setIsLoading(false), 1500);
   };
 
+
+  useEffect(() => {
+    renderVideo(videos[0].url);
+  }, []);
+  
   const handleVideoSelect = (video: Video) => {
     setSelectedVideo(video);
     renderVideo(video.url);
