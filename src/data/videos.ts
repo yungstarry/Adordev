@@ -6,13 +6,18 @@ export interface Video {
   tags: string[];
 }
 
-
-
 // style: ["Cinematic", "Storytelling", "Fast-paced", "Minimalist", "Documentary", "Motion Graphics", "Artistic"],
 //     type: ["Brand", "YouTube", "Short-form"],
 //     tags: ["Editor's Favorite", "Most Viewed", "Favorite"],
 
 export const videos: Video[] = [
+  {
+    title: "4996: Trailer REEL",
+    url: "https://www.instagram.com/p/DZdHRByDZYB/",
+    style: ["Minimalist", "Motion Graphics", "Artistic"],
+    type: "Short-form",
+    tags: ["Editor's Favorite", "Most Viewed"],
+  },
   {
     title: "4997: INTRO REEL",
     url: "hhttps://www.tiktok.com/@adordev_/video/7638699864011984136?is_from_webapp=1&sender_device=pc",
