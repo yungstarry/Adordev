@@ -12,7 +12,7 @@ export interface Video {
 
 export const videos: Video[] = [
   {
-    title: "4996: Check Out My Edit",
+    title: "4995: Check Out My Edit",
     url: "https://www.instagram.com/reel/Dd67mKVASbX/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA==",
     style: [
       "Minimalist",
