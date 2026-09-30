@@ -12,10 +12,23 @@ export interface Video {
 
 export const videos: Video[] = [
   {
+    title: "4996: Check Out My Edit",
+    url: "https://www.instagram.com/reel/Dd67mKVASbX/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA==",
+    style: [
+      "Minimalist",
+      "Storytelling",
+      "Artistic",
+      "Fast-paced",
+      "Cinematic",
+    ],
+    type: "Short-form",
+    tags: ["Editor's Favorite", "Most Viewed"],
+  },
+  {
     title: "4996: Trailer REEL",
     url: "https://www.instagram.com/p/DZdHRByDZYB/",
     style: ["Minimalist", "Motion Graphics", "Artistic"],
-    type: "Short-form",
+    type: "YouTube",
     tags: ["Editor's Favorite", "Most Viewed"],
   },
   {
