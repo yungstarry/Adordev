@@ -1,28 +1,18 @@
-import {
-  createElement,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createElement, useEffect, useMemo, useState } from "react";
 import { videos } from "../data/videos";
 import type { Video } from "../data/videos";
 import "./Work.css";
 
 type Embed =
-  | {
-      kind: "iframe" | "video";
-      src: string;
-      vertical: boolean;
-      thumb: string | null;
-    }
+  | { kind: "iframe"; src: string; vertical: boolean; thumb: string | null }
   | {
       kind: "wistia";
       mediaId: string;
       aspect: number;
       vertical: boolean;
       thumb: string | null;
-    };
+    }
+  | { kind: "video"; src: string; vertical: boolean; thumb: string | null };
 
 const wistiaScriptLoads = new Map<string, Promise<void>>();
 
@@ -66,13 +56,13 @@ const loadWistiaScript = (src: string, type?: string) => {
 const WistiaPlayer = ({
   mediaId,
   aspect,
-  onReady,
+  preview,
   onError,
 }: {
   mediaId: string;
   aspect: number;
-  onReady: () => void;
-  onError: (error: Error) => void;
+  preview: boolean;
+  onError: () => void;
 }) => {
   useEffect(() => {
     let active = true;
@@ -82,23 +72,14 @@ const WistiaPlayer = ({
       loadWistiaScript(`https://fast.wistia.com/embed/${mediaId}.js`, "module"),
     ])
       .then(() => customElements.whenDefined("wistia-player"))
-      .then(() => {
-        if (active) onReady();
-      })
-      .catch((error: unknown) => {
-        if (active) {
-          onError(
-            error instanceof Error
-              ? error
-              : new Error("Unable to load the Wistia player."),
-          );
-        }
+      .catch(() => {
+        if (active) onError();
       });
 
     return () => {
       active = false;
     };
-  }, [mediaId, onError, onReady]);
+  }, [mediaId, onError]);
 
   const className = `wk-wistia-${mediaId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
 
@@ -106,9 +87,8 @@ const WistiaPlayer = ({
     <>
       <style>{`
         .${className}:not(:defined) {
-          background: center / contain no-repeat url("https://fast.wistia.com/embed/medias/${encodeURIComponent(mediaId)}/swatch");
+          background: center / cover no-repeat url("https://fast.wistia.com/embed/medias/${encodeURIComponent(mediaId)}/swatch");
           display: block;
-          filter: blur(5px);
         }
       `}</style>
       {createElement("wistia-player", {
@@ -116,19 +96,29 @@ const WistiaPlayer = ({
         "media-id": mediaId,
         aspect: String(aspect),
         autoplay: true,
+        muted: preview,
+        playsinline: true,
       })}
     </>
   );
 };
 
-const getEmbed = (video: Video, autoplay: boolean): Embed => {
+const getEmbed = (
+  video: Video,
+  autoplay: boolean,
+  muted = autoplay,
+): Embed => {
   const { url, wistiaEmbedCode, wistiaMediaId, wistiaAspect } = video;
   const wistiaId =
-    wistiaEmbedCode?.match(
-      /(?:fast\.)?wistia\.com\/embed\/(?:([a-zA-Z0-9]+)\.js|iframe\/([a-zA-Z0-9]+))/,
-    )?.slice(1)
+    wistiaEmbedCode
+      ?.match(
+        /(?:fast\.)?wistia\.com\/embed\/(?:([a-zA-Z0-9]+)\.js|iframe\/([a-zA-Z0-9]+))/,
+      )
+      ?.slice(1)
       .find(Boolean) ??
-    wistiaEmbedCode?.match(/<wistia-player\b[^>]*\bmedia-id=["']([a-zA-Z0-9]+)["']/i)?.[1] ??
+    wistiaEmbedCode?.match(
+      /<wistia-player\b[^>]*\bmedia-id=["']([a-zA-Z0-9]+)["']/i,
+    )?.[1] ??
     wistiaMediaId;
 
   if (wistiaId) {
@@ -152,13 +142,13 @@ const getEmbed = (video: Video, autoplay: boolean): Embed => {
   if (wistiaUrl) {
     return {
       kind: "iframe",
-      src: `https://fast.wistia.net/embed/iframe/${wistiaUrl[1]}?autoPlay=${autoplay}&muted=true&seo=false`,
+      src: `https://fast.wistia.net/embed/iframe/${wistiaUrl[1]}?autoPlay=${autoplay}&muted=${muted}&seo=false`,
       vertical: false,
       thumb: null,
     };
   }
 
-  const ap = autoplay ? 1 : 0;
+  const autoplayParam = autoplay ? "1" : "0";
   const yt = url.match(
     /(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
   );
@@ -169,7 +159,7 @@ const getEmbed = (video: Video, autoplay: boolean): Embed => {
   if (yt) {
     return {
       kind: "iframe",
-      src: `https://www.youtube.com/embed/${yt[1]}?autoplay=${ap}&rel=0&modestbranding=1&playsinline=1`,
+      src: `https://www.youtube.com/embed/${yt[1]}?autoplay=${autoplayParam}&mute=${muted ? 1 : 0}&playsinline=1&rel=0&modestbranding=1`,
       vertical: url.includes("/shorts/"),
       thumb: `https://img.youtube.com/vi/${yt[1]}/mqdefault.jpg`,
     };
@@ -177,7 +167,7 @@ const getEmbed = (video: Video, autoplay: boolean): Embed => {
   if (vimeo) {
     return {
       kind: "iframe",
-      src: `https://player.vimeo.com/video/${vimeo[1]}?autoplay=${ap}&title=0&byline=0&portrait=0`,
+      src: `https://player.vimeo.com/video/${vimeo[1]}?autoplay=${autoplayParam}&muted=${muted}&playsinline=1&title=0&byline=0&portrait=0`,
       vertical: false,
       thumb: null,
     };
@@ -201,105 +191,120 @@ const getEmbed = (video: Video, autoplay: boolean): Embed => {
   return { kind: "video", src: url, vertical: false, thumb: null };
 };
 
-const pad = (n: number) => String(n).padStart(2, "0");
-
 const CURATED = ["Editor's Favorite", "Favorite"];
 const PROJECT_TYPES = [
   "Short-Form / Reels",
   "Long-Form / YouTube",
   "Intro Edit (Vlog/Podcast)",
 ];
+const PROJECTS_PER_PAGE = 12;
 
 const Work = () => {
-  const [selected, setSelected] = useState<Video>(videos[0]);
-  const [interacted, setInteracted] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [playerError, setPlayerError] = useState<string | null>(null);
-
   const [typeFilter, setTypeFilter] = useState("All");
   const [tagFilter, setTagFilter] = useState("All");
-
-  useEffect(() => {
-    if (!isLoading) return;
-
-    const timeout = window.setTimeout(() => {
-      setIsLoading(false);
-      setPlayerError(
-        "The embedded video did not finish loading. Check that the post is public and embedding is allowed.",
-      );
-    }, 10000);
-
-    return () => window.clearTimeout(timeout);
-  }, [isLoading, selected]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selected, setSelected] = useState<Video | null>(null);
+  const [failedPreviews, setFailedPreviews] = useState<string[]>([]);
 
   const types = useMemo(() => ["All", ...PROJECT_TYPES], []);
   const tags = useMemo(() => ["All", ...CURATED], []);
-
   const filtered = useMemo(
     () =>
       videos.filter(
-        (v) =>
-          (typeFilter === "All" || v.type.includes(typeFilter)) &&
-          (tagFilter === "All" || v.tags.includes(tagFilter)),
+        (video) =>
+          (typeFilter === "All" || video.type.includes(typeFilter)) &&
+          (tagFilter === "All" || video.tags.includes(tagFilter)),
       ),
     [typeFilter, tagFilter],
   );
-
-  const hasFilters = typeFilter !== "All" || tagFilter !== "All";
-
-  const embed = useMemo(
-    () => getEmbed(selected, interacted),
-    [selected, interacted],
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PROJECTS_PER_PAGE));
+  const activePage = Math.min(currentPage, pageCount);
+  const visibleProjects = filtered.slice(
+    (activePage - 1) * PROJECTS_PER_PAGE,
+    activePage * PROJECTS_PER_PAGE,
   );
 
-  const currentIndex = filtered.findIndex((v) => v.title === selected.title);
-  const position = currentIndex === -1 ? 0 : currentIndex + 1;
+  useEffect(() => {
+    if (!selected) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
-  const select = (video: Video) => {
-    if (video.title === selected.title) return;
-    setSelected(video);
-    setInteracted(true);
-    setIsLoading(true);
-    setPlayerError(null);
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelected(null);
+    };
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [selected]);
+
+  const setPreviewFailed = (title: string) => {
+    setFailedPreviews((failed) =>
+      failed.includes(title) ? failed : [...failed, title],
+    );
   };
 
-  const step = (dir: 1 | -1) => {
-    if (!filtered.length) return;
-    const base = currentIndex === -1 ? (dir === 1 ? -1 : 0) : currentIndex;
-    const next = (base + dir + filtered.length) % filtered.length;
-    select(filtered[next]);
+  const renderPlayer = (video: Video, preview: boolean) => {
+    const embed = getEmbed(video, true, preview);
+
+    if (embed.kind === "wistia") {
+      return (
+        <WistiaPlayer
+          key={embed.mediaId}
+          mediaId={embed.mediaId}
+          aspect={embed.aspect}
+          preview={preview}
+          onError={() => setPreviewFailed(video.title)}
+        />
+      );
+    }
+    if (embed.kind === "iframe") {
+      return (
+        <iframe
+          key={embed.src}
+          src={embed.src}
+          title={video.title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+          allowFullScreen={!preview}
+          loading={preview ? "eager" : "lazy"}
+          tabIndex={preview ? -1 : undefined}
+        />
+      );
+    }
+    return (
+      <video
+        key={embed.src}
+        src={embed.src}
+        autoPlay
+        muted={preview}
+        loop={preview}
+        controls={!preview}
+        playsInline
+        onError={() => setPreviewFailed(video.title)}
+      />
+    );
   };
 
-  const resetFilters = () => {
-    setTypeFilter("All");
-    setTagFilter("All");
-  };
-
-  const handleWistiaReady = useCallback(() => setIsLoading(false), []);
-  const handleWistiaError = useCallback((error: Error) => {
-    console.error(error);
-    setIsLoading(false);
-    setPlayerError("The Wistia player could not be loaded. Please try again.");
-  }, []);
-
-  const renderChips = (
+  const renderFilters = (
     label: string,
     options: string[],
     value: string,
-    onChange: (v: string) => void,
+    onChange: (option: string) => void,
   ) => (
     <div className="wk-filter">
       <span className="wk-filter-label">{label}</span>
       <div className="wk-chips" role="group" aria-label={label}>
-        {options.map((o) => (
+        {options.map((option) => (
           <button
-            key={o}
+            key={option}
+            className={`wk-chip ${value === option ? "is-active" : ""}`}
             type="button"
-            className={`wk-chip ${value === o ? "is-active" : ""}`}
-            aria-pressed={value === o}
-            onClick={() => onChange(o)}
+            aria-pressed={value === option}
+            onClick={() => onChange(option)}
           >
-            {o}
+            {option}
           </button>
         ))}
       </div>
@@ -315,186 +320,154 @@ const Work = () => {
             Watch my editing style <em>come alive</em>
           </h2>
           <p className="wk-subtitle reveal">
-            Pick a project and press play. Raw footage in, cinematic story out.
+            A collection of stories, edits, and moments in motion.
           </p>
         </header>
 
-        <div className="wk-room reveal">
-          {/* ───────── STAGE ───────── */}
-          <div className="wk-stage">
-            <div className={`wk-screen ${embed.vertical ? "is-vertical" : ""}`}>
-              <div className="wk-glow" aria-hidden="true" />
-              <div className="wk-frame">
-                {isLoading && (
-                  <div className="wk-loading" aria-live="polite">
-                    <div className="wk-spinner" />
-                    <span>Loading reel</span>
-                  </div>
-                )}
+        <div className="wk-gallery-controls reveal">
+          {renderFilters("Type", types, typeFilter, (value) => {
+            setTypeFilter(value);
+            setCurrentPage(1);
+          })}
+          {renderFilters("Curated", tags, tagFilter, (value) => {
+            setTagFilter(value);
+            setCurrentPage(1);
+          })}
+          <span className="wk-gallery-count">
+            {filtered.length} {filtered.length === 1 ? "project" : "projects"}
+          </span>
+        </div>
 
-                {embed.kind === "wistia" ? (
-                  <WistiaPlayer
-                    key={embed.mediaId}
-                    mediaId={embed.mediaId}
-                    aspect={embed.aspect}
-                    onReady={handleWistiaReady}
-                    onError={handleWistiaError}
-                  />
-                ) : embed.kind === "iframe" ? (
-                  <iframe
-                    key={embed.src}
-                    src={embed.src}
-                    title={selected.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                    allowFullScreen
-                    onLoad={() => setIsLoading(false)}
-                  />
-                ) : (
-                  <video
-                    key={embed.src}
-                    src={embed.src}
-                    controls
-                    playsInline
-                    autoPlay={interacted}
-                    onLoadedData={() => setIsLoading(false)}
-                  />
-                )}
-
-                {playerError && (
-                  <div className="wk-player-error" role="alert">
-                    <p>{playerError}</p>
-                    <a href={selected.url} target="_blank" rel="noreferrer">
-                      Open the original video
-                    </a>
-                  </div>
-                )}
-                <div className="wk-watermark">✦ Edited by Adordev</div>
-              </div>
-            </div>
-
-            <div className="wk-now">
-              <div className="wk-now-text">
-                <span className="wk-now-label">
-                  <i className="wk-live" /> Now playing
-                </span>
-                <h3 className="wk-now-title">{selected.title}</h3>
-                <div className="wk-meta">
-                  <span className="wk-pill">{selected.type.join(" · ")}</span>
-                  {selected.tags.map((t) => (
-                    <span key={t} className="wk-pill wk-pill--accent">
-                      ★ {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="wk-controls">
-                <button
-                  type="button"
-                  className="wk-nav"
-                  onClick={() => step(-1)}
-                  aria-label="Previous project"
-                  disabled={!filtered.length}
+        {filtered.length ? (
+          <div className="wk-grid">
+            {visibleProjects.map((video, index) => {
+              const embed = getEmbed(video, true, true);
+              const failed = failedPreviews.includes(video.title);
+              return (
+                <article
+                  className={`wk-card ${embed.vertical ? "is-vertical" : "is-wide"}`}
+                  key={`${video.title}-${(activePage - 1) * PROJECTS_PER_PAGE + index}`}
                 >
-                  <i className="fa-solid fa-chevron-left" />
-                </button>
-                <span className="wk-count">
-                  {pad(position)}
-                  <em> / {pad(filtered.length)}</em>
-                </span>
-                <button
-                  type="button"
-                  className="wk-nav"
-                  onClick={() => step(1)}
-                  aria-label="Next project"
-                  disabled={!filtered.length}
-                >
-                  <i className="fa-solid fa-chevron-right" />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* ───────── RAIL ───────── */}
-          <aside className="wk-rail">
-            <div className="wk-rail-head">
-              <div className="wk-rail-title">
-                <span>Projects</span>
-                <span className="wk-badge">{filtered.length}</span>
-                {hasFilters && (
-                  <button
-                    type="button"
-                    className="wk-reset"
-                    onClick={resetFilters}
-                  >
-                    Clear
-                  </button>
-                )}
-              </div>
-              {renderChips("Type", types, typeFilter, setTypeFilter)}
-              {renderChips("Curated", tags, tagFilter, setTagFilter)}
-            </div>
-
-            <ul className="wk-list">
-              {filtered.length === 0 && (
-                <li className="wk-empty">
-                  <p>No projects match these filters.</p>
-                  <button
-                    type="button"
-                    className="wk-chip is-active"
-                    onClick={resetFilters}
-                  >
-                    Show all projects
-                  </button>
-                </li>
-              )}
-
-              {filtered.map((v, i) => {
-                const active = v.title === selected.title;
-                const thumb = getEmbed(v, false).thumb;
-                return (
-                  <li key={v.title}>
+                  <div className="wk-card-media">
+                    {failed ? (
+                      <div className="wk-preview-error">
+                        <span>Preview unavailable</span>
+                      </div>
+                    ) : (
+                      renderPlayer(video, true)
+                    )}
                     <button
                       type="button"
-                      className={`wk-item ${active ? "is-active" : ""}`}
-                      onClick={() => select(v)}
-                      aria-current={active ? "true" : undefined}
+                      className="wk-card-open"
+                      aria-label={`Play ${video.title}`}
+                      onClick={() => setSelected(video)}
                     >
-                      <span
-                        className="wk-thumb"
-                        style={
-                          thumb
-                            ? { backgroundImage: `url(${thumb})` }
-                            : undefined
-                        }
-                      >
-                        {!thumb && <b>{pad(i + 1)}</b>}
-                        <span className="wk-thumb-overlay">
-                          {active ? (
-                            <span className="wk-eq" aria-hidden="true">
-                              <i />
-                              <i />
-                              <i />
-                            </span>
-                          ) : (
-                            <i className="fa-solid fa-play" />
-                          )}
-                        </span>
+                      <span className="wk-play-icon" aria-hidden="true">
+                        <i className="fa-solid fa-play" />
                       </span>
-                      <span className="wk-item-body">
-                        <span className="wk-item-title">{v.title}</span>
-                        <span className="wk-item-meta">
-                          {v.type.join(" · ")}
-                        </span>
-                      </span>
+                      <span className="wk-card-hint">Watch full video</span>
                     </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </aside>
-        </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="wk-empty">
+            <p>No projects match these filters.</p>
+            <button
+              type="button"
+              className="wk-chip is-active"
+              onClick={() => {
+                setTypeFilter("All");
+                setTagFilter("All");
+                setCurrentPage(1);
+              }}
+            >
+              Show all projects
+            </button>
+          </div>
+        )}
+
+        {pageCount > 1 && (
+          <nav className="wk-pagination" aria-label="Project pages">
+            <span className="wk-pagination-summary">
+              Showing {(activePage - 1) * PROJECTS_PER_PAGE + 1}–
+              {Math.min(activePage * PROJECTS_PER_PAGE, filtered.length)} of{" "}
+              {filtered.length}
+            </span>
+            <div className="wk-pagination-controls">
+              <button
+                type="button"
+                className="wk-page-button"
+                onClick={() => setCurrentPage(activePage - 1)}
+                disabled={activePage === 1}
+                aria-label="Previous page"
+              >
+                <i className="fa-solid fa-chevron-left" />
+              </button>
+              {Array.from({ length: pageCount }, (_, index) => index + 1).map(
+                (page) => (
+                  <button
+                    key={page}
+                    type="button"
+                    className={`wk-page-button ${activePage === page ? "is-active" : ""}`}
+                    onClick={() => setCurrentPage(page)}
+                    aria-label={`Page ${page}`}
+                    aria-current={activePage === page ? "page" : undefined}
+                  >
+                    {page}
+                  </button>
+                ),
+              )}
+              <button
+                type="button"
+                className="wk-page-button"
+                onClick={() => setCurrentPage(activePage + 1)}
+                disabled={activePage === pageCount}
+                aria-label="Next page"
+              >
+                <i className="fa-solid fa-chevron-right" />
+              </button>
+            </div>
+          </nav>
+        )}
       </div>
+
+      {selected && (
+        <div
+          className="wk-modal"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setSelected(null);
+          }}
+        >
+          <section
+            className="wk-modal-content"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Playing ${selected.title}`}
+          >
+            <button
+              type="button"
+              className="wk-modal-close"
+              aria-label="Close video"
+              onClick={() => setSelected(null)}
+            >
+              <i className="fa-solid fa-xmark" />
+            </button>
+            <div
+              className={`wk-modal-player ${getEmbed(selected, true, false).vertical ? "is-vertical" : ""}`}
+            >
+              {renderPlayer(selected, false)}
+            </div>
+            <div className="wk-modal-caption">
+              <h3>{selected.title}</h3>
+              <p>{selected.type.join(" · ")}</p>
+            </div>
+          </section>
+        </div>
+      )}
     </section>
   );
 };

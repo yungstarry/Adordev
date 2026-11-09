@@ -37,4 +37,322 @@ export const videos: Video[] = [
     type: ["Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
     tags: ["Editor's Favorite"],
   },
+  {
+    title: "new one",
+    url: "https://www.instagram.com/reel/Dd67mKVASbX/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA==",
+    wistiaEmbedCode: `<script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/wjaeb7jof6.js" async type="module"></script><style>wistia-player[media-id='wjaeb7jof6']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/wjaeb7jof6/swatch'); display: block; filter: blur(5px); padding-top:177.78%; }</style> <wistia-player media-id="wjaeb7jof6" aspect="0.5625"></wistia-player>`,
+    type: ["Short-Form / Reels"],
+    tags: ["Editor's Favorite"],
+  },
+  {
+    title: "new one",
+    url: "https://www.instagram.com/reel/Dd67mKVASbX/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA==",
+    wistiaEmbedCode: `<script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/wjaeb7jof6.js" async type="module"></script><style>wistia-player[media-id='wjaeb7jof6']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/wjaeb7jof6/swatch'); display: block; filter: blur(5px); padding-top:177.78%; }</style> <wistia-player media-id="wjaeb7jof6" aspect="0.5625"></wistia-player>`,
+    type: ["Short-Form / Reels"],
+    tags: ["Editor's Favorite"],
+  },
+  {
+    title: "4997: INTRO REEL",
+    url: "https://fast.wistia.net/embed/iframe/20bh9rjdlv",
+    wistiaEmbedCode: `
+      <script src="https://fast.wistia.com/player.js" async></script>
+      <script src="https://fast.wistia.com/embed/20bh9rjdlv.js" async type="module"></script>
+      <style>
+        wistia-player[media-id='20bh9rjdlv']:not(:defined) {
+          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/20bh9rjdlv/swatch');
+          display: block;
+          filter: blur(5px);
+          padding-top: 56.25%;
+        }
+      </style>
+      <wistia-player media-id="20bh9rjdlv" aspect="1.7777777777777777"></wistia-player>
+    `,
+    type: ["Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
+    tags: ["Editor's Favorite"],
+  },
+  {
+    title: "4997: INTRO REEL",
+    url: "https://fast.wistia.net/embed/iframe/20bh9rjdlv",
+    wistiaEmbedCode: `
+      <script src="https://fast.wistia.com/player.js" async></script>
+      <script src="https://fast.wistia.com/embed/20bh9rjdlv.js" async type="module"></script>
+      <style>
+        wistia-player[media-id='20bh9rjdlv']:not(:defined) {
+          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/20bh9rjdlv/swatch');
+          display: block;
+          filter: blur(5px);
+          padding-top: 56.25%;
+        }
+      </style>
+      <wistia-player media-id="20bh9rjdlv" aspect="1.7777777777777777"></wistia-player>
+    `,
+    type: ["Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
+    tags: ["Editor's Favorite"],
+  },
+  {
+    title: "4997: INTRO REEL",
+    url: "https://fast.wistia.net/embed/iframe/20bh9rjdlv",
+    wistiaEmbedCode: `
+      <script src="https://fast.wistia.com/player.js" async></script>
+      <script src="https://fast.wistia.com/embed/20bh9rjdlv.js" async type="module"></script>
+      <style>
+        wistia-player[media-id='20bh9rjdlv']:not(:defined) {
+          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/20bh9rjdlv/swatch');
+          display: block;
+          filter: blur(5px);
+          padding-top: 56.25%;
+        }
+      </style>
+      <wistia-player media-id="20bh9rjdlv" aspect="1.7777777777777777"></wistia-player>
+    `,
+    type: ["Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
+    tags: ["Editor's Favorite"],
+  },
+  {
+    title: "4997: INTRO REEL",
+    url: "https://fast.wistia.net/embed/iframe/20bh9rjdlv",
+    wistiaEmbedCode: `
+      <script src="https://fast.wistia.com/player.js" async></script>
+      <script src="https://fast.wistia.com/embed/20bh9rjdlv.js" async type="module"></script>
+      <style>
+        wistia-player[media-id='20bh9rjdlv']:not(:defined) {
+          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/20bh9rjdlv/swatch');
+          display: block;
+          filter: blur(5px);
+          padding-top: 56.25%;
+        }
+      </style>
+      <wistia-player media-id="20bh9rjdlv" aspect="1.7777777777777777"></wistia-player>
+    `,
+    type: ["Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
+    tags: ["Editor's Favorite"],
+  },
+  {
+    title: "4997: INTRO REEL",
+    url: "https://fast.wistia.net/embed/iframe/20bh9rjdlv",
+    wistiaEmbedCode: `
+      <script src="https://fast.wistia.com/player.js" async></script>
+      <script src="https://fast.wistia.com/embed/20bh9rjdlv.js" async type="module"></script>
+      <style>
+        wistia-player[media-id='20bh9rjdlv']:not(:defined) {
+          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/20bh9rjdlv/swatch');
+          display: block;
+          filter: blur(5px);
+          padding-top: 56.25%;
+        }
+      </style>
+      <wistia-player media-id="20bh9rjdlv" aspect="1.7777777777777777"></wistia-player>
+    `,
+    type: ["Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
+    tags: ["Editor's Favorite"],
+  },
+  {
+    title: "4997: INTRO REEL",
+    url: "https://fast.wistia.net/embed/iframe/20bh9rjdlv",
+    wistiaEmbedCode: `
+      <script src="https://fast.wistia.com/player.js" async></script>
+      <script src="https://fast.wistia.com/embed/20bh9rjdlv.js" async type="module"></script>
+      <style>
+        wistia-player[media-id='20bh9rjdlv']:not(:defined) {
+          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/20bh9rjdlv/swatch');
+          display: block;
+          filter: blur(5px);
+          padding-top: 56.25%;
+        }
+      </style>
+      <wistia-player media-id="20bh9rjdlv" aspect="1.7777777777777777"></wistia-player>
+    `,
+    type: ["Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
+    tags: ["Editor's Favorite"],
+  },
+  {
+    title: "4997: INTRO REEL",
+    url: "https://fast.wistia.net/embed/iframe/20bh9rjdlv",
+    wistiaEmbedCode: `
+      <script src="https://fast.wistia.com/player.js" async></script>
+      <script src="https://fast.wistia.com/embed/20bh9rjdlv.js" async type="module"></script>
+      <style>
+        wistia-player[media-id='20bh9rjdlv']:not(:defined) {
+          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/20bh9rjdlv/swatch');
+          display: block;
+          filter: blur(5px);
+          padding-top: 56.25%;
+        }
+      </style>
+      <wistia-player media-id="20bh9rjdlv" aspect="1.7777777777777777"></wistia-player>
+    `,
+    type: ["Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
+    tags: ["Editor's Favorite"],
+  },
+  {
+    title: "4997: INTRO REEL",
+    url: "https://fast.wistia.net/embed/iframe/20bh9rjdlv",
+    wistiaEmbedCode: `
+      <script src="https://fast.wistia.com/player.js" async></script>
+      <script src="https://fast.wistia.com/embed/20bh9rjdlv.js" async type="module"></script>
+      <style>
+        wistia-player[media-id='20bh9rjdlv']:not(:defined) {
+          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/20bh9rjdlv/swatch');
+          display: block;
+          filter: blur(5px);
+          padding-top: 56.25%;
+        }
+      </style>
+      <wistia-player media-id="20bh9rjdlv" aspect="1.7777777777777777"></wistia-player>
+    `,
+    type: ["Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
+    tags: ["Editor's Favorite"],
+  },
+  {
+    title: "4997: INTRO REEL",
+    url: "https://fast.wistia.net/embed/iframe/20bh9rjdlv",
+    wistiaEmbedCode: `
+      <script src="https://fast.wistia.com/player.js" async></script>
+      <script src="https://fast.wistia.com/embed/20bh9rjdlv.js" async type="module"></script>
+      <style>
+        wistia-player[media-id='20bh9rjdlv']:not(:defined) {
+          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/20bh9rjdlv/swatch');
+          display: block;
+          filter: blur(5px);
+          padding-top: 56.25%;
+        }
+      </style>
+      <wistia-player media-id="20bh9rjdlv" aspect="1.7777777777777777"></wistia-player>
+    `,
+    type: ["Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
+    tags: ["Editor's Favorite"],
+  },
+  {
+    title: "4997: INTRO REEL",
+    url: "https://fast.wistia.net/embed/iframe/20bh9rjdlv",
+    wistiaEmbedCode: `
+      <script src="https://fast.wistia.com/player.js" async></script>
+      <script src="https://fast.wistia.com/embed/20bh9rjdlv.js" async type="module"></script>
+      <style>
+        wistia-player[media-id='20bh9rjdlv']:not(:defined) {
+          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/20bh9rjdlv/swatch');
+          display: block;
+          filter: blur(5px);
+          padding-top: 56.25%;
+        }
+      </style>
+      <wistia-player media-id="20bh9rjdlv" aspect="1.7777777777777777"></wistia-player>
+    `,
+    type: ["Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
+    tags: ["Editor's Favorite"],
+  },
+  {
+    title: "4997: INTRO REEL",
+    url: "https://fast.wistia.net/embed/iframe/20bh9rjdlv",
+    wistiaEmbedCode: `
+      <script src="https://fast.wistia.com/player.js" async></script>
+      <script src="https://fast.wistia.com/embed/20bh9rjdlv.js" async type="module"></script>
+      <style>
+        wistia-player[media-id='20bh9rjdlv']:not(:defined) {
+          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/20bh9rjdlv/swatch');
+          display: block;
+          filter: blur(5px);
+          padding-top: 56.25%;
+        }
+      </style>
+      <wistia-player media-id="20bh9rjdlv" aspect="1.7777777777777777"></wistia-player>
+    `,
+    type: ["Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
+    tags: ["Editor's Favorite"],
+  },
+  {
+    title: "4997: INTRO REEL",
+    url: "https://fast.wistia.net/embed/iframe/20bh9rjdlv",
+    wistiaEmbedCode: `
+      <script src="https://fast.wistia.com/player.js" async></script>
+      <script src="https://fast.wistia.com/embed/20bh9rjdlv.js" async type="module"></script>
+      <style>
+        wistia-player[media-id='20bh9rjdlv']:not(:defined) {
+          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/20bh9rjdlv/swatch');
+          display: block;
+          filter: blur(5px);
+          padding-top: 56.25%;
+        }
+      </style>
+      <wistia-player media-id="20bh9rjdlv" aspect="1.7777777777777777"></wistia-player>
+    `,
+    type: ["Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
+    tags: ["Editor's Favorite"],
+  },
+  {
+    title: "4997: INTRO REEL",
+    url: "https://fast.wistia.net/embed/iframe/20bh9rjdlv",
+    wistiaEmbedCode: `
+      <script src="https://fast.wistia.com/player.js" async></script>
+      <script src="https://fast.wistia.com/embed/20bh9rjdlv.js" async type="module"></script>
+      <style>
+        wistia-player[media-id='20bh9rjdlv']:not(:defined) {
+          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/20bh9rjdlv/swatch');
+          display: block;
+          filter: blur(5px);
+          padding-top: 56.25%;
+        }
+      </style>
+      <wistia-player media-id="20bh9rjdlv" aspect="1.7777777777777777"></wistia-player>
+    `,
+    type: ["Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
+    tags: ["Editor's Favorite"],
+  },
+  {
+    title: "4997: INTRO REEL",
+    url: "https://fast.wistia.net/embed/iframe/20bh9rjdlv",
+    wistiaEmbedCode: `
+      <script src="https://fast.wistia.com/player.js" async></script>
+      <script src="https://fast.wistia.com/embed/20bh9rjdlv.js" async type="module"></script>
+      <style>
+        wistia-player[media-id='20bh9rjdlv']:not(:defined) {
+          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/20bh9rjdlv/swatch');
+          display: block;
+          filter: blur(5px);
+          padding-top: 56.25%;
+        }
+      </style>
+      <wistia-player media-id="20bh9rjdlv" aspect="1.7777777777777777"></wistia-player>
+    `,
+    type: ["Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
+    tags: ["Editor's Favorite"],
+  },
+  {
+    title: "4997: INTRO REEL",
+    url: "https://fast.wistia.net/embed/iframe/20bh9rjdlv",
+    wistiaEmbedCode: `
+      <script src="https://fast.wistia.com/player.js" async></script>
+      <script src="https://fast.wistia.com/embed/20bh9rjdlv.js" async type="module"></script>
+      <style>
+        wistia-player[media-id='20bh9rjdlv']:not(:defined) {
+          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/20bh9rjdlv/swatch');
+          display: block;
+          filter: blur(5px);
+          padding-top: 56.25%;
+        }
+      </style>
+      <wistia-player media-id="20bh9rjdlv" aspect="1.7777777777777777"></wistia-player>
+    `,
+    type: ["Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
+    tags: ["Editor's Favorite"],
+  },
+  {
+    title: "4997: INTRO REEL",
+    url: "https://fast.wistia.net/embed/iframe/20bh9rjdlv",
+    wistiaEmbedCode: `
+      <script src="https://fast.wistia.com/player.js" async></script>
+      <script src="https://fast.wistia.com/embed/20bh9rjdlv.js" async type="module"></script>
+      <style>
+        wistia-player[media-id='20bh9rjdlv']:not(:defined) {
+          background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/20bh9rjdlv/swatch');
+          display: block;
+          filter: blur(5px);
+          padding-top: 56.25%;
+        }
+      </style>
+      <wistia-player media-id="20bh9rjdlv" aspect="1.7777777777777777"></wistia-player>
+    `,
+    type: ["Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
+    tags: ["Editor's Favorite"],
+  },
 ];
