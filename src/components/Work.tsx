@@ -204,6 +204,11 @@ const getEmbed = (video: Video, autoplay: boolean): Embed => {
 const pad = (n: number) => String(n).padStart(2, "0");
 
 const CURATED = ["Editor's Favorite", "Favorite"];
+const PROJECT_TYPES = [
+  "Short-Form / Reels",
+  "Long-Form / YouTube",
+  "Intro Edit (Vlog/Podcast)",
+];
 
 const Work = () => {
   const [selected, setSelected] = useState<Video>(videos[0]);
@@ -227,17 +232,14 @@ const Work = () => {
     return () => window.clearTimeout(timeout);
   }, [isLoading, selected]);
 
-  const types = useMemo(
-    () => ["All", ...Array.from(new Set(videos.map((v) => v.type)))],
-    [],
-  );
+  const types = useMemo(() => ["All", ...PROJECT_TYPES], []);
   const tags = useMemo(() => ["All", ...CURATED], []);
 
   const filtered = useMemo(
     () =>
       videos.filter(
         (v) =>
-          (typeFilter === "All" || v.type === typeFilter) &&
+          (typeFilter === "All" || v.type.includes(typeFilter)) &&
           (tagFilter === "All" || v.tags.includes(tagFilter)),
       ),
     [typeFilter, tagFilter],
@@ -377,7 +379,7 @@ const Work = () => {
                 </span>
                 <h3 className="wk-now-title">{selected.title}</h3>
                 <div className="wk-meta">
-                  <span className="wk-pill">{selected.type}</span>
+                  <span className="wk-pill">{selected.type.join(" · ")}</span>
                   {selected.tags.map((t) => (
                     <span key={t} className="wk-pill wk-pill--accent">
                       ★ {t}
@@ -482,7 +484,7 @@ const Work = () => {
                       <span className="wk-item-body">
                         <span className="wk-item-title">{v.title}</span>
                         <span className="wk-item-meta">
-                          {v.type}
+                          {v.type.join(" · ")}
                         </span>
                       </span>
                     </button>

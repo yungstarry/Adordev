@@ -5,23 +5,19 @@ export interface Video {
   /** @deprecated Prefer wistiaEmbedCode; retained for existing entries. */
   wistiaMediaId?: string; // Set to use Wistia's inline player for this project.
   wistiaAspect?: number; // Optional aspect ratio, defaults to 16 / 9.
-  type: string;
+  type: string[];
   tags: string[];
 }
-
-//     type: ["Short-Form / Reels", "Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
-//     tags: ["Editor's Favorite", "Favorite"],
 
 export const videos: Video[] = [
   {
     title: "new one",
     url: "https://www.instagram.com/reel/Dd67mKVASbX/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA==",
     wistiaEmbedCode: `<script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/wjaeb7jof6.js" async type="module"></script><style>wistia-player[media-id='wjaeb7jof6']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/wjaeb7jof6/swatch'); display: block; filter: blur(5px); padding-top:177.78%; }</style> <wistia-player media-id="wjaeb7jof6" aspect="0.5625"></wistia-player>`,
-    type: "Short-Form / Reels",
+    type: ["Short-Form / Reels"],
     tags: ["Editor's Favorite"],
   },
 
-  
   {
     title: "4997: INTRO REEL",
     url: "https://fast.wistia.net/embed/iframe/20bh9rjdlv",
@@ -38,8 +34,7 @@ export const videos: Video[] = [
       </style>
       <wistia-player media-id="20bh9rjdlv" aspect="1.7777777777777777"></wistia-player>
     `,
-    type: "Intro Edit (Vlog/Podcast)",
+    type: ["Long-Form / YouTube", "Intro Edit (Vlog/Podcast)"],
     tags: ["Editor's Favorite"],
   },
- 
 ];
