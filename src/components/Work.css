@@ -128,10 +128,6 @@
   background: #08090d;
 }
 
-.wk-card.is-vertical .wk-card-media {
-  aspect-ratio: 0.8;
-}
-
 .wk-card-media iframe,
 .wk-card-media video,
 .wk-card-media wistia-player {
